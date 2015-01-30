@@ -7,8 +7,8 @@ import org.apache.hadoop.fs.FSDataInputStream;
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
 
-import wti.st.info.SparkStageRecord;
-import wti.st.info.SparkTaskDetail;
+import wti.st.info.StageRecord;
+import wti.st.info.TaskRecord;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -23,7 +23,7 @@ import java.util.Map;
 public class SparkTaskParser {
     private final String sparkLogDir;
 
-    private String jobID;
+    private String appID;
 
     public SparkTaskParser(String sparkLogDir) throws IOException {
 
@@ -41,19 +41,19 @@ public class SparkTaskParser {
         this.sparkLogDir = sparkLogDir;
     }
 
-    public List<SparkTaskDetail> taskParser(String jobID) throws IOException {
+    public List<TaskRecord> taskParser(String appID) throws IOException {
 
-        List<SparkTaskDetail> tasks = new ArrayList<SparkTaskDetail>();
-        this.jobID = jobID;
-        String jobLogDir = sparkLogDir + jobID + File.separator;
+        List<TaskRecord> tasks = new ArrayList<TaskRecord>();
+        this.appID = appID;
+        String appLogDir = sparkLogDir + appID + File.separator;
 
-        String jobLogFile = jobLogDir + SparkLogLabel.EVENT_LOG_1_FILE;
+        String appLogFile = appLogDir + SparkLogLabel.EVENT_LOG_1_FILE;
 
         Configuration conf = new Configuration();
-        URI uri = URI.create(jobLogDir.toString());
+        URI uri = URI.create(appLogDir.toString());
         FileSystem fs = FileSystem.get(uri, conf);
 
-        FSDataInputStream in = fs.open(new Path(jobLogFile));
+        FSDataInputStream in = fs.open(new Path(appLogFile));
         BufferedReader br = new BufferedReader(new InputStreamReader(in));
         String line = null;
         Gson gson = new Gson();
@@ -70,8 +70,8 @@ public class SparkTaskParser {
                 int stageID = parserID(stageIDObj);
                 int stageAttemprID = parserID(stageAttIDObj);
 
-                SparkStageRecord stage = new SparkStageRecord(stageID,
-                        stageAttemprID, this.jobID);
+                StageRecord stage = new StageRecord(stageID,
+                        stageAttemprID, this.appID);
 
                 Object taskInfo = lineMap.get(SparkLogLabel.TASK_INFO);
 
@@ -95,7 +95,7 @@ public class SparkTaskParser {
                 Timestamp endTime = parserTimestamp(
                         taskMap.get(SparkLogLabel.TASK_END_TIME));
 
-                SparkTaskDetail task = new SparkTaskDetail(taskID, taskAttID,
+                TaskRecord task = new TaskRecord(taskID, taskAttID,
                         stage, startTime, endTime, nodeName, "", "");
 
                 tasks.add(task);
@@ -129,9 +129,9 @@ public class SparkTaskParser {
     public static void main(String[] args) throws IOException {
         SparkTaskParser taskParser = new SparkTaskParser(
                 "hdfs://bigant-test-001:8020/spark110log");
-        List<SparkTaskDetail> tasks = taskParser.taskParser("wc-1412857997167");
-        for (SparkTaskDetail sparkTaskDetail : tasks) {
-            System.out.println(sparkTaskDetail);
+        List<TaskRecord> tasks = taskParser.taskParser("wc-1412857997167");
+        for (TaskRecord sparkTaskRecord : tasks) {
+            System.out.println(sparkTaskRecord);
         }
 
     }

@@ -5,31 +5,31 @@
 
 
 TaskInfo:
-	index: 			Index
-	taskID: 		Task ID
-	stageID: 		Stage ID
-	stageAttID:		Stage Attempt ID
+   index:           Index
+   taskID:          Task ID
+   stageID:         Stage ID
+   stageAttID:      Stage Attempt ID
 
-	taskEndReason:	Task End Reason 		//{"Reason":"Success"}
-	taskType:		Task Type				//ResultTask, ShuffleMapTask
+   taskEndReason:   Task End Reason       //{"Reason":"Success"}
+   taskType:        Task Type           //ResultTask, ShuffleMapTask
 
-	launchTime:		Launch Time
-	finishTime: 	Finish Time
-	
-	executorID:		Executor
-	host:			Host
-	locality:		Locality 				//NODE_LOCAL
+   launchTime:      Launch Time
+   finishTime:      Finish Time
+   
+   executorID:      Executor
+   host:            Host
+   locality:        Locality            //NODE_LOCAL
 
-	//metirc:
-	deserializeTime:Executor Deserialize Time
-	runTime:		Executor Run Time
-	gcTime:			JVM GC Time
-	serializeTime:	Result Serialization Time
+   //metirc:
+   deserializeTime: Executor Deserialize Time
+   runTime:         Executor Run Time
+   gcTime:          JVM GC Time
+   serializeTime:   Result Serialization Time
 
-	inputInfo:		Input Metrics			//{"Data Read Method":"Hadoop","Bytes Read":134217728}
-	resultSize:		Result Size
-	memSpilled:		Memory Bytes Spilled
-	diskSpilled:	Disk Bytes Spilled
+   inputInfo:       Input Metrics        //{"Data Read Method":"Hadoop","Bytes Read":134217728}
+   resultSize:      Result Size
+   memSpilled:      Memory Bytes Spilled
+   diskSpilled:     Disk Bytes Spilled
 
 
 {"Event":"SparkListenerStageSubmitted","Stage Info":{"Stage ID":0,"Stage Attempt ID":0,"Stage Name":"sortByKey at SparkSort.scala:19","Number of Tasks":75,"RDD Info":[{"RDD ID":4,"Name":"4","Storage Level":{"Use Disk":false,"Use Memory":false,"Use Tachyon":false,"Deserialized":false,"Replication":1},"Number of Partitions":75,"Number of Cached Partitions":0,"Memory Size":0,"Tachyon Size":0,"Disk Size":0},{"RDD ID":3,"Name":"3","Storage Level":{"Use Disk":false,"Use Memory":false,"Use Tachyon":false,"Deserialized":false,"Replication":1},"Number of Partitions":75,"Number of Cached Partitions":0,"Memory Size":0,"Tachyon Size":0,"Disk Size":0},{"RDD ID":0,"Name":"/user/yarn/sort_compare/10g","Storage Level":{"Use Disk":false,"Use Memory":false,"Use Tachyon":false,"Deserialized":false,"Replication":1},"Number of Partitions":75,"Number of Cached Partitions":0,"Memory Size":0,"Tachyon Size":0,"Disk Size":0},{"RDD ID":1,"Name":"/user/yarn/sort_compare/10g","Storage Level":{"Use Disk":false,"Use Memory":false,"Use Tachyon":false,"Deserialized":false,"Replication":1},"Number of Partitions":75,"Number of Cached Partitions":0,"Memory Size":0,"Tachyon Size":0,"Disk Size":0},{"RDD ID":2,"Name":"2","Storage Level":{"Use Disk":false,"Use Memory":false,"Use Tachyon":false,"Deserialized":false,"Replication":1},"Number of Partitions":75,"Number of Cached Partitions":0,"Memory Size":0,"Tachyon Size":0,"Disk Size":0}],"Details":"org.apache.spark.rdd.OrderedRDDFunctions.sortByKey(OrderedRDDFunctions.scala:63)\nsort.SparkSort$.main(SparkSort.scala:19)\nsort.SparkSort.main(SparkSort.scala)\nsun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)\nsun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:57)\nsun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)\njava.lang.reflect.Method.invoke(Method.java:606)\norg.apache.spark.deploy.SparkSubmit$.launch(SparkSubmit.scala:328)\norg.apache.spark.deploy.SparkSubmit$.main(SparkSubmit.scala:75)\norg.apache.spark.deploy.SparkSubmit.main(SparkSubmit.scala)","Accumulables":[]}}
@@ -38,34 +38,41 @@ TaskInfo:
 
 
 StageInfo:
-	stageID:		Stage ID
-	stageAttID:		Stage Attempt ID
+   stageID:         Stage ID
+   stageAttID:      Stage Attempt ID
 
-	stageName:		Stage Name
-	stageDitial:	Details 			//org.apache.spark.rdd.OrderedRDDFunctions.sortByKey(OrderedRDDFunctions.scala:63)\nsort.SparkSort$.main(SparkSort.scala:19)\nsort.SparkSort.main(SparkSort.scala)\nsun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)\nsun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:57)\nsun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)\njava.lang.reflect.Method.invoke(Method.java:606)\norg.apache.spark.deploy.SparkSubmit$.launch(SparkSubmit.scala:328)\norg.apache.spark.deploy.SparkSubmit$.main(SparkSubmit.scala:75)\norg.apache.spark.deploy.SparkSubmit.main(SparkSubmit.scala)
+   stageName:       Stage Name
+   stageDitial:     Details          //org.apache.spark.rdd.OrderedRDDFunctions.sortByKey(OrderedRDDFunctions.scala:63)\nsort.SparkSort$.main(SparkSort.scala:19)\nsort.SparkSort.main(SparkSort.scala)\nsun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)\nsun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:57)\nsun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)\njava.lang.reflect.Method.invoke(Method.java:606)\norg.apache.spark.deploy.SparkSubmit$.launch(SparkSubmit.scala:328)\norg.apache.spark.deploy.SparkSubmit$.main(SparkSubmit.scala:75)\norg.apache.spark.deploy.SparkSubmit.main(SparkSubmit.scala)
 
-	taskNum:		Number of Tasks
-	rddInfo:		RDD Info 			//[{"RDD ID":4,"Name":"4","Storage Level":{"Use Disk":false,"Use Memory":false,"Use Tachyon":false,"Deserialized":false,"Replication":1},"Number of Partitions":75,"Number of Cached Partitions":0,"Memory Size":0,"Tachyon Size":0,"Disk Size":0},{"RDD ID":3,"Name":"3","Storage Level":{"Use Disk":false,"Use Memory":false,"Use Tachyon":false,"Deserialized":false,"Replication":1},"Number of Partitions":75,"Number of Cached Partitions":0,"Memory Size":0,"Tachyon Size":0,"Disk Size":0},{"RDD ID":0,"Name":"/user/yarn/sort_compare/10g","Storage Level":{"Use Disk":false,"Use Memory":false,"Use Tachyon":false,"Deserialized":false,"Replication":1},"Number of Partitions":75,"Number of Cached Partitions":0,"Memory Size":0,"Tachyon Size":0,"Disk Size":0},{"RDD ID":1,"Name":"/user/yarn/sort_compare/10g","Storage Level":{"Use Disk":false,"Use Memory":false,"Use Tachyon":false,"Deserialized":false,"Replication":1},"Number of Partitions":75,"Number of Cached Partitions":0,"Memory Size":0,"Tachyon Size":0,"Disk Size":0},{"RDD ID":2,"Name":"2","Storage Level":{"Use Disk":false,"Use Memory":false,"Use Tachyon":false,"Deserialized":false,"Replication":1},"Number of Partitions":75,"Number of Cached Partitions":0,"Memory Size":0,"Tachyon Size":0,"Disk Size":0}]
+   taskNum:         Number of Tasks
+   rddInfo:         RDD Info         //[{"RDD ID":4,"Name":"4","Storage Level":{"Use Disk":false,"Use Memory":false,"Use Tachyon":false,"Deserialized":false,"Replication":1},"Number of Partitions":75,"Number of Cached Partitions":0,"Memory Size":0,"Tachyon Size":0,"Disk Size":0},{"RDD ID":3,"Name":"3","Storage Level":{"Use Disk":false,"Use Memory":false,"Use Tachyon":false,"Deserialized":false,"Replication":1},"Number of Partitions":75,"Number of Cached Partitions":0,"Memory Size":0,"Tachyon Size":0,"Disk Size":0},{"RDD ID":0,"Name":"/user/yarn/sort_compare/10g","Storage Level":{"Use Disk":false,"Use Memory":false,"Use Tachyon":false,"Deserialized":false,"Replication":1},"Number of Partitions":75,"Number of Cached Partitions":0,"Memory Size":0,"Tachyon Size":0,"Disk Size":0},{"RDD ID":1,"Name":"/user/yarn/sort_compare/10g","Storage Level":{"Use Disk":false,"Use Memory":false,"Use Tachyon":false,"Deserialized":false,"Replication":1},"Number of Partitions":75,"Number of Cached Partitions":0,"Memory Size":0,"Tachyon Size":0,"Disk Size":0},{"RDD ID":2,"Name":"2","Storage Level":{"Use Disk":false,"Use Memory":false,"Use Tachyon":false,"Deserialized":false,"Replication":1},"Number of Partitions":75,"Number of Cached Partitions":0,"Memory Size":0,"Tachyon Size":0,"Disk Size":0}]
 
-	submitTime:		Submission Time
-	endTime:		Completion Time
+   submitTime:      Submission Time
+   endTime:         Completion Time
 
-	// compute 
+   //need to compute
 
+   stageType
+
+   shuffleReadFromHDFS
+   shuffleReadFromMem
+   shuffleWrite
+
+
+[{"RDD ID":4,"Name":"4","Storage Level":{"Use Disk":false,"Use Memory":false,"Use Tachyon":false,"Deserialized":false,"Replication":1},"Number of Partitions":75,"Number of Cached Partitions":0,"Memory Size":0,"Tachyon Size":0,"Disk Size":0},{"RDD ID":3,"Name":"3","Storage Level":{"Use Disk":false,"Use Memory":false,"Use Tachyon":false,"Deserialized":false,"Replication":1},"Number of Partitions":75,"Number of Cached Partitions":0,"Memory Size":0,"Tachyon Size":0,"Disk Size":0},{"RDD ID":0,"Name":"/user/yarn/sort_compare/10g","Storage Level":{"Use Disk":false,"Use Memory":false,"Use Tachyon":false,"Deserialized":false,"Replication":1},"Number of Partitions":75,"Number of Cached Partitions":0,"Memory Size":0,"Tachyon Size":0,"Disk Size":0},{"RDD ID":1,"Name":"/user/yarn/sort_compare/10g","Storage Level":{"Use Disk":false,"Use Memory":false,"Use Tachyon":false,"Deserialized":false,"Replication":1},"Number of Partitions":75,"Number of Cached Partitions":0,"Memory Size":0,"Tachyon Size":0,"Disk Size":0},{"RDD ID":2,"Name":"2","Storage Level":{"Use Disk":false,"Use Memory":false,"Use Tachyon":false,"Deserialized":false,"Replication":1},"Number of Partitions":75,"Number of Cached Partitions":0,"Memory Size":0,"Tachyon Size":0,"Disk Size":0}]
 
 RDDInfo:
-	rddID:			RDD ID	
-	rddName:		Name
-	
-	storgeLevel:	Storage Level 		//{"Use Disk":false,"Use Memory":false,"Use Tachyon":false,"Deserialized":false,"Replication":1}
-	
-	numPatitions:	Number of Partitions
-	numCachedPati:	Number of Cached Partitions
+   rddID:           RDD ID
+   rddName:         Name
+   
+   storgeLevel:     Storage Level     //{"Use Disk":false,"Use Memory":false,"Use Tachyon":false,"Deserialized":false,"Replication":1}
+   
+   numPatitions:    Number of Partitions
+   numCachedPati:   Number of Cached Partitions
 
-	memSize:		Memory Size
-	tachyonSize:	Tachyon Size
-	diskSize:		Disk Size
-
+   memSize:      	Memory Size
+   tachyonSize: 	Tachyon Size
+   diskSize:        Disk Size
 
 
 
