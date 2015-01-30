@@ -8,7 +8,7 @@ import org.apache.hadoop.fs.FileStatus;
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
 
-import wti.st.info.SparkJobRecord;
+import wti.st.info.AppRecord;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -20,12 +20,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public class SparkJobParser
+public class SparkAppParser
 {
 
     private final String sparkLogDir;
 
-    public SparkJobParser(String sparkLogDir) throws IOException
+    public SparkAppParser(String sparkLogDir) throws IOException
     {
 	Configuration conf = new Configuration();
 
@@ -42,10 +42,10 @@ public class SparkJobParser
 
     }
 
-    public List<SparkJobRecord> listJobs() throws IOException
+    public List<AppRecord> listJobs() throws IOException
     {
 
-	List<SparkJobRecord> sparkJobRecords = new ArrayList<SparkJobRecord>();
+	List<AppRecord> appRecords = new ArrayList<AppRecord>();
 	Configuration conf = new Configuration();
 
 	FileSystem fs = FileSystem.get(URI.create(sparkLogDir), conf);
@@ -81,8 +81,8 @@ public class SparkJobParser
 	    }
 
 	    String[] tmp = appLogDir.split(File.separator);
-	    String jobID = tmp[tmp.length-1];
-	    String jobName = null;
+	    String appID = tmp[tmp.length-1];
+	    String appName = null;
 	    Timestamp startTime = null;
 	    Timestamp endTime = null;
 
@@ -106,7 +106,7 @@ public class SparkJobParser
 			startTime = new Timestamp(Math.round((Double) obj));
 		    }
 		   
-		    jobName = (String) map.get(SparkLogLabel.APP_NAME);
+		    appName = (String) map.get(SparkLogLabel.APP_NAME);
 		}
 		else if (eventName.equals(SparkLogLabel.APP_END_EVENT))
 		{
@@ -121,11 +121,11 @@ public class SparkJobParser
 	    br.close();
 	    in.close();
 
-	    SparkJobRecord sparkJobRecord = new SparkJobRecord(jobName, jobID,
+	    AppRecord appRecord = new AppRecord(appName, appID,
 		    startTime, endTime);
-	    sparkJobRecords.add(sparkJobRecord);
+	    appRecords.add(appRecord);
 	}
-	return sparkJobRecords;
+	return appRecords;
 
     }
 
@@ -137,12 +137,12 @@ public class SparkJobParser
 
     public static void main(String[] args) throws IOException
     {
-	SparkJobParser jobParser = new SparkJobParser(
+	SparkAppParser jobParser = new SparkAppParser(
 	        "hdfs://bigant-test-001:8020/spark110log");
-	List<SparkJobRecord> jobList = jobParser.listJobs();
-	for (SparkJobRecord sparkJobRecord : jobList)
+	List<AppRecord> jobList = jobParser.listJobs();
+	for (AppRecord appRecord : jobList)
 	{
-	    System.out.println(sparkJobRecord);
+	    System.out.println(appRecord);
 	}
     }
 }
