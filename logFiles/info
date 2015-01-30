@@ -5,7 +5,6 @@
 
 
 TaskInfo:
-
 	index: 			Index
 	taskID: 		Task ID
 	stageID: 		Stage ID
