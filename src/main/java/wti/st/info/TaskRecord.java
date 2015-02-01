@@ -14,20 +14,26 @@ public class TaskRecord {
 
 	private String node;
 
-	private String properties;
-	private String timeTable;
-
 	private long runTime;
 	private long gcTime;
 	private long deserialTime;  	//Executor Deserialize Time
 	private long serializeTime;		//Result Serialization Time
 
+	private long memSpilled;		//Memory Bytes Spilled
+	private long diskSpilled;		//Disk Bytes Spilled
+
+	// may do not appear
 	private long bytesRead;
 	private TaskReadMethod readMethod;
 	private long resultSize;
 
-	private long memSpilled;		//Memory Bytes Spilled
-	private long diskSpilled;		//Disk Bytes Spilled
+	private long shuffleWriteBytes;
+	private long shuffleWriteTime;
+
+	private long shuffleReadRemoteBlocks;
+	private long shuffleReadLocalBlocks;
+	private long shuffleReadRemoteBytes;
+	private long shuffleFetchWaitTime;
 
 
 	public TaskRecord(int taskID, int taskAttemptID, StageRecord stage) {
@@ -36,18 +42,29 @@ public class TaskRecord {
 		this.stage = stage;
 	}
 
-
-	public TaskRecord(int taskID, int taskAttemptID,
-					  StageRecord stage, Timestamp launchTime, Timestamp finishTime,
-					  String node, String properties, String timeTable) {
+	public TaskRecord(int taskID, int taskAttemptID, StageRecord stage, TaskType taskType, Timestamp launchTime, Timestamp finishTime, String node, long runTime, long gcTime, long deserialTime, long serializeTime, long memSpilled, long diskSpilled, long bytesRead, TaskReadMethod readMethod, long resultSize, long shuffleWriteBytes, long shuffleWriteTime, long shuffleReadRemoteBlocks, long shuffleReadLocalBlocks, long shuffleReadRemoteBytes, long shuffleFetchWaitTime) {
 		this.taskID = taskID;
 		this.taskAttemptID = taskAttemptID;
 		this.stage = stage;
+		this.taskType = taskType;
 		this.launchTime = launchTime;
 		this.finishTime = finishTime;
 		this.node = node;
-		this.properties = properties;
-		this.timeTable = timeTable;
+		this.runTime = runTime;
+		this.gcTime = gcTime;
+		this.deserialTime = deserialTime;
+		this.serializeTime = serializeTime;
+		this.memSpilled = memSpilled;
+		this.diskSpilled = diskSpilled;
+		this.bytesRead = bytesRead;
+		this.readMethod = readMethod;
+		this.resultSize = resultSize;
+		this.shuffleWriteBytes = shuffleWriteBytes;
+		this.shuffleWriteTime = shuffleWriteTime;
+		this.shuffleReadRemoteBlocks = shuffleReadRemoteBlocks;
+		this.shuffleReadLocalBlocks = shuffleReadLocalBlocks;
+		this.shuffleReadRemoteBytes = shuffleReadRemoteBytes;
+		this.shuffleFetchWaitTime = shuffleFetchWaitTime;
 	}
 
 	@Override
@@ -97,14 +114,6 @@ public class TaskRecord {
 		this.finishTime = finishTime;
 	}
 
-	public String getProperties() {
-		return properties;
-	}
-
-	public void setProperties(String properties) {
-		this.properties = properties;
-	}
-
 	public String getNode() {
 		return node;
 	}
@@ -121,6 +130,152 @@ public class TaskRecord {
 		this.taskType = taskType;
 	}
 
+	public long getRunTime() {
+		return runTime;
+	}
+
+	public void setRunTime(long runTime) {
+		this.runTime = runTime;
+	}
+
+	public long getGcTime() {
+		return gcTime;
+	}
+
+	public void setGcTime(long gcTime) {
+		this.gcTime = gcTime;
+	}
+
+	public long getDeserialTime() {
+		return deserialTime;
+	}
+
+	public void setDeserialTime(long deserialTime) {
+		this.deserialTime = deserialTime;
+	}
+
+	public long getSerializeTime() {
+		return serializeTime;
+	}
+
+	public void setSerializeTime(long serializeTime) {
+		this.serializeTime = serializeTime;
+	}
+
+	public long getBytesRead() {
+		return bytesRead;
+	}
+
+	public void setBytesRead(long bytesRead) {
+		this.bytesRead = bytesRead;
+	}
+
+	public TaskReadMethod getReadMethod() {
+		return readMethod;
+	}
+
+	public void setReadMethod(TaskReadMethod readMethod) {
+		this.readMethod = readMethod;
+	}
+
+	public long getResultSize() {
+		return resultSize;
+	}
+
+	public void setResultSize(long resultSize) {
+		this.resultSize = resultSize;
+	}
+
+	public long getMemSpilled() {
+		return memSpilled;
+	}
+
+	public void setMemSpilled(long memSpilled) {
+		this.memSpilled = memSpilled;
+	}
+
+	public long getDiskSpilled() {
+		return diskSpilled;
+	}
+
+	public void setDiskSpilled(long diskSpilled) {
+		this.diskSpilled = diskSpilled;
+	}
+
+	//
+	public long getMemRead(){
+		if (this.readMethod.equals(TaskReadMethod.Memory)){
+			return this.bytesRead;
+		}else {
+			return 0l;
+		}
+	}
+	public long getHadoopRead(){
+		if (this.readMethod.equals(TaskReadMethod.Hadoop)){
+			return this.bytesRead;
+		}else {
+			return 0l;
+		}
+
+	}
+
+//	public long getDiskRead(){
+//		if (this.readMethod.equals(TaskReadMethod.Disk)){
+//			return this.bytesRead;
+//		}else {
+//			return 0l;
+//		}
+//	}
+
+
+	public long getShuffleWriteBytes() {
+		return shuffleWriteBytes;
+	}
+
+	public void setShuffleWriteBytes(long shuffleWriteBytes) {
+		this.shuffleWriteBytes = shuffleWriteBytes;
+	}
+
+	public long getShuffleWriteTime() {
+		return shuffleWriteTime;
+	}
+
+	public void setShuffleWriteTime(long shuffleWriteTime) {
+		this.shuffleWriteTime = shuffleWriteTime;
+	}
+
+	public long getShuffleReadRemoteBlocks() {
+		return shuffleReadRemoteBlocks;
+	}
+
+	public void setShuffleReadRemoteBlocks(long shuffleReadRemoteBlocks) {
+		this.shuffleReadRemoteBlocks = shuffleReadRemoteBlocks;
+	}
+
+	public long getShuffleReadLocalBlocks() {
+		return shuffleReadLocalBlocks;
+	}
+
+	public void setShuffleReadLocalBlocks(long shuffleReadLocalBlocks) {
+		this.shuffleReadLocalBlocks = shuffleReadLocalBlocks;
+	}
+
+	public long getShuffleReadRemoteBytes() {
+		return shuffleReadRemoteBytes;
+	}
+
+	public void setShuffleReadRemoteBytes(long shuffleReadRemoteBytes) {
+		this.shuffleReadRemoteBytes = shuffleReadRemoteBytes;
+	}
+
+	public long getShuffleFetchWaitTime() {
+		return shuffleFetchWaitTime;
+	}
+
+	public void setShuffleFetchWaitTime(long shuffleFetchWaitTime) {
+		this.shuffleFetchWaitTime = shuffleFetchWaitTime;
+	}
+
 	@Override
 	public String toString() {
 		return "TaskDetail{" +
@@ -131,8 +286,6 @@ public class TaskRecord {
 				", launchTime=" + launchTime +
 				", finishTime=" + finishTime +
 				", node='" + node + '\'' +
-				", properties='" + properties + '\'' +
-				", timeTable='" + timeTable + '\'' +
 				", runTime=" + runTime +
 				", gcTime=" + gcTime +
 				", deserialTime=" + deserialTime +
@@ -144,6 +297,5 @@ public class TaskRecord {
 				", diskSpilled=" + diskSpilled +
 				'}';
 	}
-
 
 }

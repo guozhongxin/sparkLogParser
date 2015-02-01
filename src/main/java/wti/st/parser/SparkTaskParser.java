@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+@Deprecated
 public class SparkTaskParser {
     private final String sparkLogDir;
 
@@ -96,7 +97,7 @@ public class SparkTaskParser {
                         taskMap.get(SparkLogLabel.TASK_END_TIME));
 
                 TaskRecord task = new TaskRecord(taskID, taskAttID,
-                        stage, startTime, endTime, nodeName, "", "");
+                        stage);
 
                 tasks.add(task);
             }

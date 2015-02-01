@@ -2,6 +2,7 @@
 {"Event":"SparkListenerTaskStart","Stage ID":0,"Stage Attempt ID":0,"Task Info":{"Task ID":61,"Index":39,"Attempt":0,"Launch Time":1415256422721,"Executor ID":"8","Host":"bigant-test-003","Locality":"NODE_LOCAL","Speculative":false,"Getting Result Time":0,"Finish Time":0,"Failed":false,"Accumulables":[]}}
 
 {"Event":"SparkListenerTaskEnd","Stage ID":0,"Stage Attempt ID":0,"Task Type":"ResultTask","Task End Reason":{"Reason":"Success"},"Task Info":{"Task ID":61,"Index":39,"Attempt":0,"Launch Time":1415256422721,"Executor ID":"8","Host":"bigant-test-003","Locality":"NODE_LOCAL","Speculative":false,"Getting Result Time":0,"Finish Time":1415256425620,"Failed":false,"Accumulables":[]},"Task Metrics":{"Host Name":"bigant-test-003","Executor Deserialize Time":510,"Executor Run Time":2066,"Result Size":2309,"JVM GC Time":55,"Result Serialization Time":0,"Memory Bytes Spilled":0,"Disk Bytes Spilled":0,"Input Metrics":{"Data Read Method":"Hadoop","Bytes Read":134217728}}}
+{"Event":"SparkListenerTaskEnd","Stage ID":2,"Stage Attempt ID":0,"Task Type":"ShuffleMapTask","Task End Reason":{"Reason":"Succes"Task Info":{"Task ID":14,"Index":67,"Attempt":0,"Launch Time":1415256429782,"Executor ID":"1","Host":"bigant-test-003","Locality":"NODE_LOCAL","Speculative":false,"Getting Result Time":0,"Finish Time":1415256439627,"Failed":false,"Accumulables":[]},"Task Metrics":{"Host Name":"bigant-test-003","Executor Deserialize Time":388,"Executor Run Time":9414,"Result Size":1879,"JVM GC Time":18,"Result Serialization Time":0,"Memory Bytes Spilled":0,"Disk Bytes Spilled":0,"Shuffle Write Metrics":{"Shuffle Bytes Written":66753983,"Shuffle Write Time":1950151017},"Input Metrics":{"Data Read Method":"Hadoop","Bytes Read":134217728}}}
 
 
 TaskInfo:
@@ -26,15 +27,37 @@ TaskInfo:
    gcTime:          JVM GC Time
    serializeTime:   Result Serialization Time
 
-   inputInfo:       Input Metrics        //{"Data Read Method":"Hadoop","Bytes Read":134217728}
    resultSize:      Result Size
+
    memSpilled:      Memory Bytes Spilled
    diskSpilled:     Disk Bytes Spilled
+
+// may do not appear
+   inputInfo:       Input Metrics        //"Input Metrics":{"Data Read Method":"Hadoop","Bytes Read":134217728}
+
+
+   // "Shuffle Write Metrics":{"Shuffle Bytes Written":66757322,"Shuffle Write Time":138373180}
+
+   shuffleWriteBytes:    Shuffle Bytes Written
+   shuffleWriteTime:     Shuffle Write Time
+
+   // "Shuffle Read Metrics":{"Shuffle Finish Time":-1,"Remote Blocks Fetched":0,"Local Blocks Fetched":0,"Fetch Wait
+      Time":0,"Remote Bytes Read":0}
+   // "Shuffle Read Metrics":{"Shuffle Finish Time":-1,"Remote Blocks Fetched":69,"Local Blocks Fetched":6,
+      "Fetch Wait Time":14820,"Remote Bytes Read":62406189}
+
+   shuffleReadRemoteBlocks:
+   shuffleReadLocalBlocks:
+   shuffleReadRemoteBytes:
+   shuffleFetchWaitTime:
 
 
 {"Event":"SparkListenerStageSubmitted","Stage Info":{"Stage ID":0,"Stage Attempt ID":0,"Stage Name":"sortByKey at SparkSort.scala:19","Number of Tasks":75,"RDD Info":[{"RDD ID":4,"Name":"4","Storage Level":{"Use Disk":false,"Use Memory":false,"Use Tachyon":false,"Deserialized":false,"Replication":1},"Number of Partitions":75,"Number of Cached Partitions":0,"Memory Size":0,"Tachyon Size":0,"Disk Size":0},{"RDD ID":3,"Name":"3","Storage Level":{"Use Disk":false,"Use Memory":false,"Use Tachyon":false,"Deserialized":false,"Replication":1},"Number of Partitions":75,"Number of Cached Partitions":0,"Memory Size":0,"Tachyon Size":0,"Disk Size":0},{"RDD ID":0,"Name":"/user/yarn/sort_compare/10g","Storage Level":{"Use Disk":false,"Use Memory":false,"Use Tachyon":false,"Deserialized":false,"Replication":1},"Number of Partitions":75,"Number of Cached Partitions":0,"Memory Size":0,"Tachyon Size":0,"Disk Size":0},{"RDD ID":1,"Name":"/user/yarn/sort_compare/10g","Storage Level":{"Use Disk":false,"Use Memory":false,"Use Tachyon":false,"Deserialized":false,"Replication":1},"Number of Partitions":75,"Number of Cached Partitions":0,"Memory Size":0,"Tachyon Size":0,"Disk Size":0},{"RDD ID":2,"Name":"2","Storage Level":{"Use Disk":false,"Use Memory":false,"Use Tachyon":false,"Deserialized":false,"Replication":1},"Number of Partitions":75,"Number of Cached Partitions":0,"Memory Size":0,"Tachyon Size":0,"Disk Size":0}],"Details":"org.apache.spark.rdd.OrderedRDDFunctions.sortByKey(OrderedRDDFunctions.scala:63)\nsort.SparkSort$.main(SparkSort.scala:19)\nsort.SparkSort.main(SparkSort.scala)\nsun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)\nsun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:57)\nsun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)\njava.lang.reflect.Method.invoke(Method.java:606)\norg.apache.spark.deploy.SparkSubmit$.launch(SparkSubmit.scala:328)\norg.apache.spark.deploy.SparkSubmit$.main(SparkSubmit.scala:75)\norg.apache.spark.deploy.SparkSubmit.main(SparkSubmit.scala)","Accumulables":[]}}
 
-{"Event":"SparkListenerStageCompleted","Stage Info":{"Stage ID":0,"Stage Attempt ID":0,"Stage Name":"sortByKey at SparkSort.scala:19","Number of Tasks":75,"RDD Info":[{"RDD ID":4,"Name":"4","Storage Level":{"Use Disk":false,"Use Memory":false,"Use Tachyon":false,"Deserialized":false,"Replication":1},"Number of Partitions":75,"Number of Cached Partitions":0,"Memory Size":0,"Tachyon Size":0,"Disk Size":0},{"RDD ID":3,"Name":"3","Storage Level":{"Use Disk":false,"Use Memory":false,"Use Tachyon":false,"Deserialized":false,"Replication":1},"Number of Partitions":75,"Number of Cached Partitions":0,"Memory Size":0,"Tachyon Size":0,"Disk Size":0},{"RDD ID":0,"Name":"/user/yarn/sort_compare/10g","Storage Level":{"Use Disk":false,"Use Memory":false,"Use Tachyon":false,"Deserialized":false,"Replication":1},"Number of Partitions":75,"Number of Cached Partitions":0,"Memory Size":0,"Tachyon Size":0,"Disk Size":0},{"RDD ID":1,"Name":"/user/yarn/sort_compare/10g","Storage Level":{"Use Disk":false,"Use Memory":false,"Use Tachyon":false,"Deserialized":false,"Replication":1},"Number of Partitions":75,"Number of Cached Partitions":0,"Memory Size":0,"Tachyon Size":0,"Disk Size":0},{"RDD ID":2,"Name":"2","Storage Level":{"Use Disk":false,"Use Memory":false,"Use Tachyon":false,"Deserialized":false,"Replication":1},"Number of Partitions":75,"Number of Cached Partitions":0,"Memory Size":0,"Tachyon Size":0,"Disk Size":0}],"Details":"org.apache.spark.rdd.OrderedRDDFunctions.sortByKey(OrderedRDDFunctions.scala:63)\nsort.SparkSort$.main(SparkSort.scala:19)\nsort.SparkSort.main(SparkSort.scala)\nsun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)\nsun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:57)\nsun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)\njava.lang.reflect.Method.invoke(Method.java:606)\norg.apache.spark.deploy.SparkSubmit$.launch(SparkSubmit.scala:328)\norg.apache.spark.deploy.SparkSubmit$.main(SparkSubmit.scala:75)\norg.apache.spark.deploy.SparkSubmit.main(SparkSubmit.scala)","Submission Time":1415256420934,"Completion Time":1415256429504,"Accumulables":[]}}
+{"Event":"SparkListenerStageCompleted","Stage Info":{"Stage ID":0,"Stage Attempt ID":0,"Stage Name":"sortByKey at SparkSort.scala:19","Number of Tasks":75,"RDD Info":[{"RDD ID":4,"Name":"4","Storage Level":{"Use Disk":false,"Use Memory":false,"Use Tachyon":false,"Deserialized":false,"Replication":1},"Number of Partitions":75,"Number of Cached Partitions":0,"Memory Size":0,"Tachyon Size":0,"Disk Size":0},{"RDD ID":3,"Name":"3","Storage Level":{"Use Disk":false,"Use Memory":false,"Use Tachyon":false,"Deserialized":false,"Replication":1},"Number of Partitions":75,"Number of Cached Partitions":0,"Memory Size":0,"Tachyon Size":0,"Disk Size":0},{"RDD ID":0,"Name":"g","Storage Level":{"Use Disk":false,"Use Memory":false,"Use Tachyon":false,"Deserialized":false,"Replication":1},"Number of Partitions":75,"Number of Cached Partitions":0,"Memory Size":0,"Tachyon Size":0,"Disk Size":0},{"RDD ID":1,"Name":"/user/yarn/sort_compare/10g","Storage Level":{"Use Disk":false,"Use Memory":false,"Use Tachyon":false,"Deserialized":false,"Replication":1},"Number of Partitions":75,"Number of Cached Partitions":0,"Memory Size":0,"Tachyon Size":0,"Disk Size":0},{"RDD ID":2,"Name":"2","Storage Level":{"Use Disk":false,"Use Memory":false,"Use Tachyon":false,"Deserialized":false,"Replication":1},"Number of Partitions":75,"Number of Cached Partitions":0,"Memory Size":0,"Tachyon Size":0,"Disk Size":0}],"Details":"org.apache.spark.rdd.Ordereetho.deploy.\norg.apache.spark.deploy.SparkSubmit.main(SparkSubmit.scala)","Submission Time":1415256420934,"Completion Time":1415256429504,"Accumulables":[]}}
+{"Event":"SparkListenerStageCompleted","Stage Info":{"Stage ID":1,"Stage Attempt ID":0,"Stage Name":"saveAsTextFile at SparkSo","Number of Tasks":75,"RDD Info":[],"Details":"org)","Submission Time":1415256441386,"Completion Time":1415256507173,"Accumulables":[]}}
+
+{"Event":"SparkListenerStageCompleted","Stage Info":{"Stage ID":2,"Stage Attempt ID":0,"Stage Name":"map at SparkSort.scala:18","Number of Tasks":75,"RDD Info":[{"RDD ID":2,"Name":"2","Storage Level":{"Use Disk":false,"Use Memory":false,"Use Tachyon":false,"Deserialized":false,"Replication":1},"Number of Partitions":75,"Number of Cached Partitions":0,"Memory Size":0,"Tachyon Size":0,"Disk Size":0},{"RDD ID":0,"Name":"/user/yarn/sort_compare/10g","Storage Level":{"Use Disk":false,"Use Memory":false,"Use Tachyon":false,"Deserialized":false,"Replication":1},"Number of Partitions":75,"Number of Cached Partitions":0,"Memory Size":0,"Tachyon Size":0,"Disk Size":0},{"RDD ID":1,"Name":"/user/yarn/sort_compare/10g","Storage Level":{"Use Disk":false,"Use Memory":false,"Use Tachyon":false,"Deserialized":false,"Replication":1},"Number of Partitions":75,"Number of Cached Partitions":0,"Memory Size":0,"Tachyon Size":0,"Disk Size":0}],"Details":"org.apache.spark.rdd.RDD.map(RDD.scala:270)\nsort.SparkSort$.main(SparkSort.scala:18)\nsort.SparkSort.main(SparkSort.scala)\nsun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)\nsun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:57)\nsun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)\njava.lang.reflect.Method.invoke(Method.java:606)\norg.apache.spark.deploy.SparkSubmit$.launch(SparkSubmit.scala:328)\norg.apache.spark.deploy.SparkSubmit$.main(SparkSubmit.scala:75)\norg.apache.spark.deploy.SparkSubmit.main(SparkSubmit.scala)","Submission Time":1415256429744,"Completion Time":1415256441317,"Accumulables":[]}}
 
 
 StageInfo:
@@ -56,6 +79,7 @@ StageInfo:
 
    shuffleReadFromHDFS
    shuffleReadFromMem
+
    shuffleWrite
 
 

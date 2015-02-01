@@ -7,7 +7,7 @@ public class StageRecord {
 	private final int stageID;
 	private final int stageAttemptID;
 
-	private final String jobID;
+	private final String appID;
 
 	private String stageName;
 	private String stageDitial;
@@ -19,23 +19,33 @@ public class StageRecord {
 	private Timestamp endTime;
 
 	//need to compute
-	private StageType stageType;
-	private long shuffleReadFromHDFS;
-	private long shuffleReadFromMem;
-	private long shuffleWrite;
+	private TaskType stageType;
 
-	public StageRecord(int stageID, int stageAttemprID, String jobID,
-					   String stageName) {
+	private long inputFromMem;
+	private long inputFromHadoop;
+	private long shuffleReadBytes;
+	private long shuffleWriteBytes;
+
+	private long shuffleFetchWaitTime;
+	private long shuffleWriteTime;
+
+
+	public StageRecord(int stageID, int stageAttemprID, String appID) {
 		this.stageID = stageID;
 		this.stageAttemptID = stageAttemprID;
-		this.jobID = jobID;
-		this.stageName = stageName;
+		this.appID = appID;
 	}
 
-	public StageRecord(int stageID, int stageAttemprID, String jobID) {
+	public StageRecord(int stageID, int stageAttemptID, String appID, String stageName, String stageDitial, int taskNum, List<RDDInfo> rdds, Timestamp submitTime, Timestamp endTime) {
 		this.stageID = stageID;
-		this.stageAttemptID = stageAttemprID;
-		this.jobID = jobID;
+		this.stageAttemptID = stageAttemptID;
+		this.appID = appID;
+		this.stageName = stageName;
+		this.stageDitial = stageDitial;
+		this.taskNum = taskNum;
+		this.rdds = rdds;
+		this.submitTime = submitTime;
+		this.endTime = endTime;
 	}
 
 	@Override
@@ -47,7 +57,7 @@ public class StageRecord {
 			StageRecord sparkStage = (StageRecord) obj;
 			if (this.stageID == sparkStage.stageID
 					&& this.stageAttemptID == sparkStage.stageAttemptID
-					&& this.jobID.equals(sparkStage.jobID)) {
+					&& this.appID.equals(sparkStage.appID)) {
 				return true;
 			} else {
 				return false;
@@ -70,8 +80,8 @@ public class StageRecord {
 		return stageName;
 	}
 
-	public String getJobID() {
-		return jobID;
+	public String getAppID() {
+		return appID;
 	}
 
 	public void setStageName(String stageName) {
@@ -118,44 +128,69 @@ public class StageRecord {
 		this.endTime = endTime;
 	}
 
-	public StageType getStageType() {
+	public TaskType getStageType() {
 		return stageType;
 	}
 
-	public void setStageType(StageType stageType) {
+	public void setStageType(TaskType stageType) {
 		this.stageType = stageType;
 	}
 
-	public long getShuffleReadFromHDFS() {
-		return shuffleReadFromHDFS;
+	public long getInputFromMem() {
+		return inputFromMem;
 	}
 
-	public void setShuffleReadFromHDFS(long shuffleReadFromHDFS) {
-		this.shuffleReadFromHDFS = shuffleReadFromHDFS;
+	public void setInputFromMem(long inputFromMem) {
+		this.inputFromMem = inputFromMem;
 	}
 
-	public long getShuffleReadFromMem() {
-		return shuffleReadFromMem;
+	public long getInputFromHadoop() {
+		return inputFromHadoop;
 	}
 
-	public void setShuffleReadFromMem(long shuffleReadFromMem) {
-		this.shuffleReadFromMem = shuffleReadFromMem;
+	public void setInputFromHadoop(long inputFromHadoop) {
+		this.inputFromHadoop = inputFromHadoop;
 	}
 
-	public long getShuffleWrite() {
-		return shuffleWrite;
+	public long getShuffleReadBytes() {
+		return shuffleReadBytes;
 	}
 
-	public void setShuffleWrite(long shuffleWrite) {
-		this.shuffleWrite = shuffleWrite;
+	public void setShuffleReadBytes(long shuffleReadBytes) {
+		this.shuffleReadBytes = shuffleReadBytes;
 	}
+
+	public long getShuffleWriteBytes() {
+		return shuffleWriteBytes;
+	}
+
+	public void setShuffleWriteBytes(long shuffleWriteBytes) {
+		this.shuffleWriteBytes = shuffleWriteBytes;
+	}
+
+	public long getShuffleFetchWaitTime() {
+		return shuffleFetchWaitTime;
+	}
+
+	public void setShuffleFetchWaitTime(long shuffleFetchWaitTime) {
+		this.shuffleFetchWaitTime = shuffleFetchWaitTime;
+	}
+
+	public long getShuffleWriteTime() {
+		return shuffleWriteTime;
+	}
+
+	public void setShuffleWriteTime(long shuffleWriteTime) {
+		this.shuffleWriteTime = shuffleWriteTime;
+	}
+
 
 	@Override
 	public String toString() {
 		return "StageRecord{" +
 				"stageID=" + stageID +
 				", stageAttemptID=" + stageAttemptID +
-				", jobID='" + jobID + '\'' +
+				", appID='" + appID + '\'' +
 				", stageName='" + stageName + '\'' +
 				", stageDitial='" + stageDitial + '\'' +
 				", taskNum=" + taskNum +
@@ -163,11 +198,12 @@ public class StageRecord {
 				", submitTime=" + submitTime +
 				", endTime=" + endTime +
 				", stageType=" + stageType +
-				", shuffleReadFromHDFS=" + shuffleReadFromHDFS +
-				", shuffleReadFromMem=" + shuffleReadFromMem +
-				", shuffleWrite=" + shuffleWrite +
+				", inputFromMem=" + inputFromMem +
+				", inputFromHadoop=" + inputFromHadoop +
+				", shuffleReadBytes=" + shuffleReadBytes +
+				", shuffleWriteBytes=" + shuffleWriteBytes +
+				", shuffleFetchWaitTime=" + shuffleFetchWaitTime +
+				", shuffleWriteTime=" + shuffleWriteTime +
 				'}';
 	}
-
-
 }
