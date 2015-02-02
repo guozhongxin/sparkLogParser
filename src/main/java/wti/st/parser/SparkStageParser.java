@@ -378,6 +378,5 @@ public class SparkStageParser {
 			fw.write(line);
 		}
 		fw.close();
-
 	}
 }
