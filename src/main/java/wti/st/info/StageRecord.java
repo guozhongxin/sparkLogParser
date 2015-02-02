@@ -23,6 +23,7 @@ public class StageRecord {
 
 	private long inputFromMem;
 	private long inputFromHadoop;
+	private long inputFromDisk;
 	private long shuffleReadBytes;
 	private long shuffleWriteBytes;
 
@@ -153,6 +154,14 @@ public class StageRecord {
 
 	public void setInputFromHadoop(long inputFromHadoop) {
 		this.inputFromHadoop = inputFromHadoop;
+	}
+
+	public long getInputFromDisk() {
+		return inputFromDisk;
+	}
+
+	public void setInputFromDisk(long inputFromDisk) {
+		this.inputFromDisk = inputFromDisk;
 	}
 
 	public long getShuffleReadBytes() {

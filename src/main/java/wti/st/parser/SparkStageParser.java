@@ -268,11 +268,13 @@ public class SparkStageParser {
 			stageDetail.setStageType(taskRecord.getTaskType());
 			stageDetail.setInputFromMem(stageDetail.getInputFromMem() + taskRecord.getMemRead());
 			stageDetail.setInputFromHadoop(stageDetail.getInputFromHadoop() + taskRecord.getHadoopRead());
+			stageDetail.setInputFromDisk(stageDetail.getInputFromDisk() + taskRecord.getDiskRead());
 			stageDetail.setShuffleReadBytes(stageDetail.getShuffleReadBytes() + taskRecord.getShuffleReadRemoteBytes());
 			stageDetail.setShuffleWriteBytes(stageDetail.getShuffleWriteBytes() + taskRecord.getShuffleWriteBytes());
 			stageDetail.setShuffleFetchWaitTime(stageDetail.getShuffleFetchWaitTime() + taskRecord.getShuffleFetchWaitTime());
 			stageDetail.setTasksGCTime(stageDetail.getTasksGCTime() + taskRecord.getGcTime());
 			stageDetail.setTasksRunTime(stageDetail.getTasksRunTime() + taskRecord.getRunTime());
+
 
 			stages.set(index, stageDetail);
 		}
@@ -351,8 +353,9 @@ public class SparkStageParser {
 
 		FileWriter fw = new FileWriter(output,true);
 
-		fw.write("stageID,stageAttID,appID,stageName,taskNum,submitTime,endTime,stageType,inputFromMem," +
-				"inputFromHadoop,shuffleRead,shuffleWrite,shuffleFetchWaitTime,shuffleWriteTime,tasksRunTime," +
+		fw.write("stageID,stageAttID,appID,stageName,taskNum,submitTime,endTime,stageType,inputFromHadoop," +
+				"inputFromMem,inputFromDisk,shuffleRead,shuffleWrite,shuffleFetchWaitTime,shuffleWriteTime," +
+				"tasksRunTime," +
 				"tasksGCTime\n");
 		for (StageRecord stageRecord : stages) {
 			String line = stageRecord.getStageID() + "," +
@@ -363,8 +366,9 @@ public class SparkStageParser {
 					stageRecord.getSubmitTime() + "," +
 					stageRecord.getEndTime() + "," +
 					stageRecord.getStageType() + "," +
-					stageRecord.getInputFromMem() + "," +
 					stageRecord.getInputFromHadoop() + "," +
+					stageRecord.getInputFromMem() + "," +
+					stageRecord.getInputFromDisk() + "," +
 					stageRecord.getShuffleReadBytes() + "," +
 					stageRecord.getShuffleWriteBytes() + "," +
 					stageRecord.getShuffleFetchWaitTime() + "," +

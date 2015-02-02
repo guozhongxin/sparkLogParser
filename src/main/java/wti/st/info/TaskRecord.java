@@ -219,13 +219,13 @@ public class TaskRecord {
 
 	}
 
-//	public long getDiskRead(){
-//		if (this.readMethod.equals(TaskReadMethod.Disk)){
-//			return this.bytesRead;
-//		}else {
-//			return 0l;
-//		}
-//	}
+	public long getDiskRead(){
+		if (this.readMethod.equals(TaskReadMethod.Disk)){
+			return this.bytesRead;
+		}else {
+			return 0l;
+		}
+	}
 
 
 	public long getShuffleWriteBytes() {
