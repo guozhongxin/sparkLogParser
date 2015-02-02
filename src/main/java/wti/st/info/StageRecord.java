@@ -29,6 +29,9 @@ public class StageRecord {
 	private long shuffleFetchWaitTime;
 	private long shuffleWriteTime;
 
+	private long tasksRunTime;
+	private long tasksGCTime;
+
 
 	public StageRecord(int stageID, int stageAttemprID, String appID) {
 		this.stageID = stageID;
@@ -184,6 +187,21 @@ public class StageRecord {
 		this.shuffleWriteTime = shuffleWriteTime;
 	}
 
+	public long getTasksRunTime() {
+		return tasksRunTime;
+	}
+
+	public void setTasksRunTime(long tasksRunTime) {
+		this.tasksRunTime = tasksRunTime;
+	}
+
+	public long getTasksGCTime() {
+		return tasksGCTime;
+	}
+
+	public void setTasksGCTime(long tasksGCTime) {
+		this.tasksGCTime = tasksGCTime;
+	}
 
 	@Override
 	public String toString() {
@@ -204,6 +222,8 @@ public class StageRecord {
 				", shuffleWriteBytes=" + shuffleWriteBytes +
 				", shuffleFetchWaitTime=" + shuffleFetchWaitTime +
 				", shuffleWriteTime=" + shuffleWriteTime +
+				", tasksRunTime=" + tasksRunTime +
+				", tasksGCTime=" + tasksGCTime +
 				'}';
 	}
 }

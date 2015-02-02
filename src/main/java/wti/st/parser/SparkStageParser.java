@@ -271,6 +271,8 @@ public class SparkStageParser {
 			stageDetail.setShuffleReadBytes(stageDetail.getShuffleReadBytes() + taskRecord.getShuffleReadRemoteBytes());
 			stageDetail.setShuffleWriteBytes(stageDetail.getShuffleWriteBytes() + taskRecord.getShuffleWriteBytes());
 			stageDetail.setShuffleFetchWaitTime(stageDetail.getShuffleFetchWaitTime() + taskRecord.getShuffleFetchWaitTime());
+			stageDetail.setTasksGCTime(stageDetail.getTasksGCTime() + taskRecord.getGcTime());
+			stageDetail.setTasksRunTime(stageDetail.getTasksRunTime() + taskRecord.getRunTime());
 
 			stages.set(index, stageDetail);
 		}
@@ -350,7 +352,8 @@ public class SparkStageParser {
 		FileWriter fw = new FileWriter(output,true);
 
 		fw.write("stageID,stageAttID,appID,stageName,taskNum,submitTime,endTime,stageType,inputFromMem," +
-				"inputFromHadoop,shuffleRead,shuffleWrite,shuffleFetchWaitTime,shuffleWriteTime\n");
+				"inputFromHadoop,shuffleRead,shuffleWrite,shuffleFetchWaitTime,shuffleWriteTime,tasksRunTime," +
+				"tasksGCTime\n");
 		for (StageRecord stageRecord : stages) {
 			String line = stageRecord.getStageID() + "," +
 					stageRecord.getStageAttemptID() + "," +
@@ -365,7 +368,9 @@ public class SparkStageParser {
 					stageRecord.getShuffleReadBytes() + "," +
 					stageRecord.getShuffleWriteBytes() + "," +
 					stageRecord.getShuffleFetchWaitTime() + "," +
-					stageRecord.getShuffleWriteTime() + "," + "\n";
+					stageRecord.getShuffleWriteTime() + "," +
+					stageRecord.getTasksRunTime() +"," +
+					stageRecord.getTasksGCTime() +"\n";
 			fw.write(line);
 		}
 		fw.close();
