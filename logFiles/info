@@ -39,8 +39,10 @@ TaskInfo:
    diskSpilled:     Disk Bytes Spilled
 
 // may do not appear
-   inputInfo:       Input Metrics        //"Input Metrics":{"Data Read Method":"Hadoop","Bytes Read":134217728}
+//"Input Metrics":{"Data Read Method":"Disk","Bytes Read":74670108}
+//"Input Metrics":{"Data Read Method":"Hadoop","Bytes Read":134217728}
 
+   inputInfo:       Input Metrics
 
    // "Shuffle Write Metrics":{"Shuffle Bytes Written":66757322,"Shuffle Write Time":138373180}
 
