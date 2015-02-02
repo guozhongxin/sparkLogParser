@@ -27,14 +27,14 @@ public class SparkStageParser {
 
 	public SparkStageParser(String sparkLogDir) throws IOException {
 
-		Configuration conf = new Configuration();
-		URI uri = URI.create(sparkLogDir);
-		FileSystem fs = FileSystem.get(uri, conf);
-
-		if (!(fs.exists(new Path(sparkLogDir)))) {
-			// XXX
-			System.out.println("Path of the spark log directory is wrong");
-		}
+//		Configuration conf = new Configuration();
+//		URI uri = URI.create(sparkLogDir);
+//		FileSystem fs = FileSystem.get(uri, conf);
+//
+//		if (!(fs.exists(new Path(sparkLogDir)))) {
+//			// XXX
+//			System.out.println("Path of the spark log directory is wrong");
+//		}
 		if (!sparkLogDir.endsWith(File.separator)) {
 			sparkLogDir += File.separator;
 		}
@@ -262,8 +262,6 @@ public class SparkStageParser {
 		for (TaskRecord taskRecord : tasks) {
 			StageRecord stageRecord = taskRecord.getStage();
 
-			System.out.println(taskRecord);
-
 			int index = stages.indexOf(stageRecord);
 			StageRecord stageDetail = stages.get(index);
 
@@ -349,7 +347,8 @@ public class SparkStageParser {
 
 		List<StageRecord> stages = stageParser.stageParserLocal(dir,appID);
 
-		FileWriter fw = new FileWriter(output);
+		FileWriter fw = new FileWriter(output,true);
+
 		fw.write("stageID,stageAttID,appID,stageName,taskNum,submitTime,endTime,stageType,inputFromMem," +
 				"inputFromHadoop,shuffleRead,shuffleWrite,shuffleFetchWaitTime,shuffleWriteTime\n");
 		for (StageRecord stageRecord : stages) {
