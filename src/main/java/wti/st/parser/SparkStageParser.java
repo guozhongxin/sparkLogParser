@@ -90,6 +90,7 @@ public class SparkStageParser {
 
 		List<TaskRecord> tasks = new ArrayList<TaskRecord>();
 
+		System.out.println(filePath);
 		BufferedReader br = new BufferedReader(new FileReader(filePath));
 		String line = null;
 		Gson gson = new Gson();
@@ -109,6 +110,7 @@ public class SparkStageParser {
 
 
 			if (eventName.equals(SparkLogLabel.TASK_END_EVENT)) {
+
 				TaskRecord task = parserTask(lineMap, appID);
 				tasks.add(task);
 			}
@@ -165,6 +167,8 @@ public class SparkStageParser {
 				new TypeToken<Map<String, Object>>() {
 				}.getType());
 
+
+//		System.out.println("taskID:   "+ taskID );
 		long deserialTime = parserLong(taskMetricsMap.get(SparkLogLabel.TASK_DESERIALIZE_TIME));
 		long serialTime = parserLong(taskMetricsMap.get(SparkLogLabel.TASK_SERIALIZE_TIME));
 		long runTime = parserLong(taskMetricsMap.get(SparkLogLabel.TASK_RUN_TIME));
@@ -353,18 +357,19 @@ public class SparkStageParser {
 
 		FileWriter fw = new FileWriter(output,true);
 
-		fw.write("stageID,stageAttID,appID,stageName,taskNum,submitTime,endTime,stageType,inputFromHadoop," +
+		fw.write("stageID,stageAttID,appID,stageName,taskNum,runningTime,stageType,inputFromHadoop," +
 				"inputFromMem,inputFromDisk,shuffleRead,shuffleWrite,shuffleFetchWaitTime,shuffleWriteTime," +
 				"tasksRunTime," +
 				"tasksGCTime\n");
 		for (StageRecord stageRecord : stages) {
+			Long stageRunningTime = Long.parseLong(stageRecord.getEndTime().toString())
+					- Long.parseLong(stageRecord.getSubmitTime().toString());
 			String line = stageRecord.getStageID() + "," +
 					stageRecord.getStageAttemptID() + "," +
 					stageRecord.getAppID() + "," +
 					stageRecord.getStageName() + "," +
 					stageRecord.getTaskNum() + "," +
-					stageRecord.getSubmitTime() + "," +
-					stageRecord.getEndTime() + "," +
+					stageRunningTime + "," +
 					stageRecord.getStageType() + "," +
 					stageRecord.getInputFromHadoop() + "," +
 					stageRecord.getInputFromMem() + "," +

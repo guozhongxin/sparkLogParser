@@ -1,4 +1,3 @@
-
 {"Event":"SparkListenerTaskStart","Stage ID":0,"Stage Attempt ID":0,"Task Info":{"Task ID":61,"Index":39,"Attempt":0,"Launch Time":1415256422721,"Executor ID":"8","Host":"bigant-test-003","Locality":"NODE_LOCAL","Speculative":false,"Getting Result Time":0,"Finish Time":0,"Failed":false,"Accumulables":[]}}
 
 {"Event":"SparkListenerTaskEnd","Stage ID":0,"Stage Attempt ID":0,"Task Type":"ResultTask","Task End Reason":{"Reason":"Success"},"Task Info":{"Task ID":61,"Index":39,"Attempt":0,"Launch Time":1415256422721,"Executor ID":"8","Host":"bigant-test-003","Locality":"NODE_LOCAL","Speculative":false,"Getting Result Time":0,"Finish Time":1415256425620,"Failed":false,"Accumulables":[]},"Task Metrics":{"Host Name":"bigant-test-003","Executor Deserialize Time":510,"Executor Run Time":2066,"Result Size":2309,"JVM GC Time":55,"Result Serialization Time":0,"Memory Bytes Spilled":0,"Disk Bytes Spilled":0,"Input Metrics":{"Data Read Method":"Hadoop","Bytes Read":134217728}}}
@@ -17,7 +16,7 @@ TaskInfo:
    stageID:         Stage ID
    stageAttID:      Stage Attempt ID
 
-   taskEndReason:   Task End Reason       //{"Reason":"Success"}
+   taskEndReason:   Task End Reason       //{"Reason":"Success"} {"Reason":"ExecutorLostFailure"}
    taskType:        Task Type           //ResultTask, ShuffleMapTask
 
    launchTime:      Launch Time
