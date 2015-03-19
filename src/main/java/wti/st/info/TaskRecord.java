@@ -19,13 +19,14 @@ public class TaskRecord {
 	private long deserialTime;  	//Executor Deserialize Time
 	private long serializeTime;		//Result Serialization Time
 
+	private long resultSize;
+
 	private long memSpilled;		//Memory Bytes Spilled
 	private long diskSpilled;		//Disk Bytes Spilled
 
 	// may do not appear
 	private long bytesRead;
 	private TaskReadMethod readMethod;
-	private long resultSize;
 
 	private long shuffleWriteBytes;
 	private long shuffleWriteTime;

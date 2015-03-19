@@ -19,6 +19,7 @@ TaskInfo:
    taskEndReason:   Task End Reason       //{"Reason":"Success"} {"Reason":"ExecutorLostFailure"}
    taskType:        Task Type           //ResultTask, ShuffleMapTask
 
+
    launchTime:      Launch Time
    finishTime:      Finish Time
    
@@ -27,6 +28,7 @@ TaskInfo:
    locality:        Locality            //NODE_LOCAL
 
    //metirc:
+
    deserializeTime: Executor Deserialize Time
    runTime:         Executor Run Time
    gcTime:          JVM GC Time

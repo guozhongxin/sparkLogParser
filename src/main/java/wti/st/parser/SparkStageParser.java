@@ -210,7 +210,7 @@ public class SparkStageParser {
 					}.getType());
 
 			shuffleWriteBytes = parserLong(shuffleWriteMetricsMap.get(SparkLogLabel.TASK_SHUFFLE_WRITE_BYTES));
-			shuffleWriteTime = parserLong(shuffleWriteMetricsMap.get(SparkLogLabel.TASK_FETCH_WAIT_TIME));
+			shuffleWriteTime = parserLong(shuffleWriteMetricsMap.get(SparkLogLabel.TASK_SHUFFLE_WRITE_TIME));
 		}
 
 		// "Shuffle Read Metrics":{"Shuffle Finish Time":-1,"Remote Blocks Fetched":69,"Local Blocks Fetched":6,"Fetch Wait Time":14820,"Remote Bytes Read":62406189}
@@ -276,9 +276,22 @@ public class SparkStageParser {
 			stageDetail.setShuffleReadBytes(stageDetail.getShuffleReadBytes() + taskRecord.getShuffleReadRemoteBytes());
 			stageDetail.setShuffleWriteBytes(stageDetail.getShuffleWriteBytes() + taskRecord.getShuffleWriteBytes());
 			stageDetail.setShuffleFetchWaitTime(stageDetail.getShuffleFetchWaitTime() + taskRecord.getShuffleFetchWaitTime());
+			stageDetail.setResultSize(stageDetail.getResultSize() + taskRecord.getResultSize());
 			stageDetail.setTasksGCTime(stageDetail.getTasksGCTime() + taskRecord.getGcTime());
 			stageDetail.setTasksRunTime(stageDetail.getTasksRunTime() + taskRecord.getRunTime());
 
+			stageDetail.setShuffleWriteTime(stageDetail.getShuffleWriteTime() + taskRecord.getShuffleWriteTime());
+			stageDetail.setShuffleReadLocalBlocks(stageDetail.getShuffleReadLocalBlocks() + taskRecord.getShuffleReadLocalBlocks());
+			stageDetail.setShuffleReadRemoteBlocks(stageDetail.getShuffleReadRemoteBlocks() + taskRecord.getShuffleReadRemoteBlocks());
+
+			Long taskLastTime = taskRecord.getFinishTime().getTime() - taskRecord.getLaunchTime().getTime();
+
+			stageDetail.setTasksLastTime(stageDetail.getTasksLastTime() + taskLastTime);
+			stageDetail.setTasksDeserialTime(stageDetail.getTasksDeserialTime() + taskRecord.getDeserialTime());
+			stageDetail.setTasksSerializeTime(stageDetail.getTasksSerializeTime() + taskRecord.getSerializeTime());
+
+			stageDetail.setDiskSpilled(stageDetail.getDiskSpilled() + taskRecord.getDiskSpilled());
+			stageDetail.setMemSpilled(stageDetail.getMemSpilled() + taskRecord.getMemSpilled());
 
 			stages.set(index, stageDetail);
 		}

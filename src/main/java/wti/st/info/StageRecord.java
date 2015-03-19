@@ -30,9 +30,19 @@ public class StageRecord {
 	private long shuffleFetchWaitTime;
 	private long shuffleWriteTime;
 
+	private long shuffleReadLocalBlocks;
+	private long shuffleReadRemoteBlocks;
+
 	private long tasksRunTime;
 	private long tasksGCTime;
+	private long tasksLastTime;
+	private long tasksDeserialTime;
+	private long tasksSerializeTime;
 
+	private long memSpilled;
+	private long diskSpilled;
+
+	private long resultSize;
 
 	public StageRecord(int stageID, int stageAttemprID, String appID) {
 		this.stageID = stageID;
@@ -212,6 +222,70 @@ public class StageRecord {
 		this.tasksGCTime = tasksGCTime;
 	}
 
+	public long getShuffleReadLocalBlocks() {
+		return shuffleReadLocalBlocks;
+	}
+
+	public void setShuffleReadLocalBlocks(long shuffleReadLocalBlocks) {
+		this.shuffleReadLocalBlocks = shuffleReadLocalBlocks;
+	}
+
+	public long getShuffleReadRemoteBlocks() {
+		return shuffleReadRemoteBlocks;
+	}
+
+	public void setShuffleReadRemoteBlocks(long shuffleReadRemoteBlocks) {
+		this.shuffleReadRemoteBlocks = shuffleReadRemoteBlocks;
+	}
+
+	public long getTasksLastTime() {
+		return tasksLastTime;
+	}
+
+	public void setTasksLastTime(long tasksLastTime) {
+		this.tasksLastTime = tasksLastTime;
+	}
+
+	public long getTasksDeserialTime() {
+		return tasksDeserialTime;
+	}
+
+	public void setTasksDeserialTime(long tasksDeserialTime) {
+		this.tasksDeserialTime = tasksDeserialTime;
+	}
+
+	public long getTasksSerializeTime() {
+		return tasksSerializeTime;
+	}
+
+	public void setTasksSerializeTime(long tasksSerializeTime) {
+		this.tasksSerializeTime = tasksSerializeTime;
+	}
+
+	public long getMemSpilled() {
+		return memSpilled;
+	}
+
+	public void setMemSpilled(long memSpilled) {
+		this.memSpilled = memSpilled;
+	}
+
+	public long getDiskSpilled() {
+		return diskSpilled;
+	}
+
+	public void setDiskSpilled(long diskSpilled) {
+		this.diskSpilled = diskSpilled;
+	}
+
+	public long getResultSize() {
+		return resultSize;
+	}
+
+	public void setResultSize(long resultSize) {
+		this.resultSize = resultSize;
+	}
+
 	@Override
 	public String toString() {
 		return "StageRecord{" +
@@ -227,12 +301,21 @@ public class StageRecord {
 				", stageType=" + stageType +
 				", inputFromMem=" + inputFromMem +
 				", inputFromHadoop=" + inputFromHadoop +
+				", inputFromDisk=" + inputFromDisk +
 				", shuffleReadBytes=" + shuffleReadBytes +
 				", shuffleWriteBytes=" + shuffleWriteBytes +
 				", shuffleFetchWaitTime=" + shuffleFetchWaitTime +
 				", shuffleWriteTime=" + shuffleWriteTime +
+				", shuffleReadLocalBlocks=" + shuffleReadLocalBlocks +
+				", shuffleReadRemoteBlocks=" + shuffleReadRemoteBlocks +
 				", tasksRunTime=" + tasksRunTime +
 				", tasksGCTime=" + tasksGCTime +
+				", tasksLastTime=" + tasksLastTime +
+				", tasksDeserialTime=" + tasksDeserialTime +
+				", tasksSerializeTime=" + tasksSerializeTime +
+				", memSpilled=" + memSpilled +
+				", diskSpilled=" + diskSpilled +
+				", resultSize=" + resultSize +
 				'}';
 	}
 }

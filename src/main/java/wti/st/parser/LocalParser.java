@@ -55,9 +55,10 @@ public class LocalParser {
 		FileWriter fw = new FileWriter(output,true);
 
 		fw.write("stageID,stageAttID,appID,stageName,taskNum,runningTime,stageType,inputFromHadoop," +
-				"inputFromMem,inputFromDisk,shuffleRead,shuffleWrite,shuffleFetchWaitTime,shuffleWriteTime," +
-				"tasksRunTime," +
-				"tasksGCTime\n");
+				"inputFromMem,inputFromDisk,shuffleRead,shuffleWrite," +
+				"shuffleReadLocalBlocks,shuffleReadRemoteBlocks,diskSpilled,memSpilled,resultSize," +
+				"shuffleFetchWaitTime,shuffleWriteTime,tasksDeserialTime,tasksSerializeTime," +
+				 "tasksRunTime,tasksGCTime,tasksLastTime\n");
 		for (String appID : appIDs) {
 
 			if (parseredAppsID.contains(appID)){
@@ -72,8 +73,8 @@ public class LocalParser {
 			List<StageRecord> stages = stageParser.stageParserLocal(eventFile,appID);
 
 			for (StageRecord stageRecord : stages) {
-				Long stageRunningTime = stageRecord.getSubmitTime().getTime() -
-						stageRecord.getEndTime().getTime();
+				Long stageRunningTime = stageRecord.getEndTime().getTime() -
+						stageRecord.getSubmitTime().getTime();
 				String line = stageRecord.getStageID() + "," +
 						stageRecord.getStageAttemptID() + "," +
 						stageRecord.getAppID() + "," +
@@ -86,10 +87,18 @@ public class LocalParser {
 						stageRecord.getInputFromDisk() + "," +
 						stageRecord.getShuffleReadBytes() + "," +
 						stageRecord.getShuffleWriteBytes() + "," +
+						stageRecord.getShuffleReadLocalBlocks() + "," +
+						stageRecord.getShuffleReadRemoteBlocks() + "," +
+						stageRecord.getDiskSpilled() + "," +
+						stageRecord.getMemSpilled() + "," +
+						stageRecord.getResultSize() + "," +
 						stageRecord.getShuffleFetchWaitTime() + "," +
 						stageRecord.getShuffleWriteTime() + "," +
+						stageRecord.getTasksDeserialTime() + "," +
+						stageRecord.getTasksSerializeTime() + "," +
 						stageRecord.getTasksRunTime() +"," +
-						stageRecord.getTasksGCTime() +"\n";
+						stageRecord.getTasksGCTime() + "," +
+						stageRecord.getTasksLastTime() +"\n";
 				fw.write(line);
 			}
 		}
@@ -97,8 +106,9 @@ public class LocalParser {
 	}
 
 	public static void main(String[] args) throws IOException {
-		String dirPath = args[0]; //"C:\\Users\\IBM_ADMIN\\IdeaProjects\\sparkWorkload\\history3";//
-		String output =args[1];   //"C:\\Users\\IBM_ADMIN\\IdeaProjects\\sparkLogParser\\bin\\workloadLog.csv";	//
+		String dirPath = "C:\\Users\\IBM_ADMIN\\IdeaProjects\\sparkWorkload\\history";//args[0]; //
+		String output ="C:\\Users\\IBM_ADMIN\\IdeaProjects\\sparkLogParser\\bin\\workloadLog_3.17__.csv";
+		//args[1];   //
 		LocalParser lp = new LocalParser();
 		List<String> apps =lp.listApps(dirPath);
 
