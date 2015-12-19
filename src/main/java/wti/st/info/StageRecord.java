@@ -10,7 +10,7 @@ public class StageRecord {
 	private final String appID;
 
 	private String stageName;
-	private String stageDitial;
+	private String stageDetial;
 
 	private int taskNum;
 	private List<RDDInfo> rdds;
@@ -24,12 +24,11 @@ public class StageRecord {
 	private long inputFromMem;
 	private long inputFromHadoop;
 	private long inputFromDisk;
+
 	private long shuffleReadBytes;
 	private long shuffleWriteBytes;
-
 	private long shuffleFetchWaitTime;
 	private long shuffleWriteTime;
-
 	private long shuffleReadLocalBlocks;
 	private long shuffleReadRemoteBlocks;
 
@@ -41,8 +40,21 @@ public class StageRecord {
 
 	private long memSpilled;
 	private long diskSpilled;
-
 	private long resultSize;
+
+	// statistics
+	private double shuffleReadBytesVar;
+	private double shuffleWriteBytesVar;
+	private double shuffleReadRemoteBlocksVar;
+	private double shuffleFetchWaitTimeVar;
+	private double shuffleWriteTimeVar;
+
+	private double tasksRunTimeVar;
+	private double tasksGCTimeVar;
+	private double tasksLastTimeVar;
+	private double tasksDeserialTimeVar;
+	private double tasksSerializeTimeVar;
+
 
 	public StageRecord(int stageID, int stageAttemprID, String appID) {
 		this.stageID = stageID;
@@ -50,12 +62,12 @@ public class StageRecord {
 		this.appID = appID;
 	}
 
-	public StageRecord(int stageID, int stageAttemptID, String appID, String stageName, String stageDitial, int taskNum, List<RDDInfo> rdds, Timestamp submitTime, Timestamp endTime) {
+	public StageRecord(int stageID, int stageAttemptID, String appID, String stageName, String stageDetial, int taskNum, List<RDDInfo> rdds, Timestamp submitTime, Timestamp endTime) {
 		this.stageID = stageID;
 		this.stageAttemptID = stageAttemptID;
 		this.appID = appID;
 		this.stageName = stageName;
-		this.stageDitial = stageDitial;
+		this.stageDetial = stageDetial;
 		this.taskNum = taskNum;
 		this.rdds = rdds;
 		this.submitTime = submitTime;
@@ -102,12 +114,12 @@ public class StageRecord {
 		this.stageName = stageName;
 	}
 
-	public String getStageDitial() {
-		return stageDitial;
+	public String getStageDetial() {
+		return stageDetial;
 	}
 
-	public void setStageDitial(String stageDitial) {
-		this.stageDitial = stageDitial;
+	public void setStageDetial(String stageDetial) {
+		this.stageDetial = stageDetial;
 	}
 
 	public int getTaskNum() {
@@ -286,6 +298,86 @@ public class StageRecord {
 		this.resultSize = resultSize;
 	}
 
+	public double getShuffleReadBytesVar() {
+		return shuffleReadBytesVar;
+	}
+
+	public void setShuffleReadBytesVar(double shuffleReadBytesVar) {
+		this.shuffleReadBytesVar = shuffleReadBytesVar;
+	}
+
+	public double getShuffleWriteBytesVar() {
+		return shuffleWriteBytesVar;
+	}
+
+	public void setShuffleWriteBytesVar(double shuffleWriteBytesVar) {
+		this.shuffleWriteBytesVar = shuffleWriteBytesVar;
+	}
+
+	public double getShuffleReadRemoteBlocksVar() {
+		return shuffleReadRemoteBlocksVar;
+	}
+
+	public void setShuffleReadRemoteBlocksVar(double shuffleReadRemoteBlocksVar) {
+		this.shuffleReadRemoteBlocksVar = shuffleReadRemoteBlocksVar;
+	}
+
+	public double getShuffleFetchWaitTimeVar() {
+		return shuffleFetchWaitTimeVar;
+	}
+
+	public void setShuffleFetchWaitTimeVar(double shuffleFetchWaitTimeVar) {
+		this.shuffleFetchWaitTimeVar = shuffleFetchWaitTimeVar;
+	}
+
+	public double getShuffleWriteTimeVar() {
+		return shuffleWriteTimeVar;
+	}
+
+	public void setShuffleWriteTimeVar(double shuffleWriteTimeVar) {
+		this.shuffleWriteTimeVar = shuffleWriteTimeVar;
+	}
+
+	public double getTasksRunTimeVar() {
+		return tasksRunTimeVar;
+	}
+
+	public void setTasksRunTimeVar(double tasksRunTimeVar) {
+		this.tasksRunTimeVar = tasksRunTimeVar;
+	}
+
+	public double getTasksGCTimeVar() {
+		return tasksGCTimeVar;
+	}
+
+	public void setTasksGCTimeVar(double tasksGCTimeVar) {
+		this.tasksGCTimeVar = tasksGCTimeVar;
+	}
+
+	public double getTasksLastTimeVar() {
+		return tasksLastTimeVar;
+	}
+
+	public void setTasksLastTimeVar(double tasksLastTimeVar) {
+		this.tasksLastTimeVar = tasksLastTimeVar;
+	}
+
+	public double getTasksDeserialTimeVar() {
+		return tasksDeserialTimeVar;
+	}
+
+	public void setTasksDeserialTimeVar(double tasksDeserialTimeVar) {
+		this.tasksDeserialTimeVar = tasksDeserialTimeVar;
+	}
+
+	public double getTasksSerializeTimeVar() {
+		return tasksSerializeTimeVar;
+	}
+
+	public void setTasksSerializeTimeVar(double tasksSerializeTimeVar) {
+		this.tasksSerializeTimeVar = tasksSerializeTimeVar;
+	}
+
 	@Override
 	public String toString() {
 		return "StageRecord{" +
@@ -293,7 +385,7 @@ public class StageRecord {
 				", stageAttemptID=" + stageAttemptID +
 				", appID='" + appID + '\'' +
 				", stageName='" + stageName + '\'' +
-				", stageDitial='" + stageDitial + '\'' +
+				", stageDetial='" + stageDetial + '\'' +
 				", taskNum=" + taskNum +
 				", rdds=" + rdds +
 				", submitTime=" + submitTime +
@@ -316,6 +408,16 @@ public class StageRecord {
 				", memSpilled=" + memSpilled +
 				", diskSpilled=" + diskSpilled +
 				", resultSize=" + resultSize +
+				", shuffleReadBytesVar=" + shuffleReadBytesVar +
+				", shuffleWriteBytesVar=" + shuffleWriteBytesVar +
+				", shuffleReadRemoteBlocksVar=" + shuffleReadRemoteBlocksVar +
+				", shuffleFetchWaitTimeVar=" + shuffleFetchWaitTimeVar +
+				", shuffleWriteTimeVar=" + shuffleWriteTimeVar +
+				", tasksRunTimeVar=" + tasksRunTimeVar +
+				", tasksGCTimeVar=" + tasksGCTimeVar +
+				", tasksLastTimeVar=" + tasksLastTimeVar +
+				", tasksDeserialTimeVar=" + tasksDeserialTimeVar +
+				", tasksSerializeTimeVar=" + tasksSerializeTimeVar +
 				'}';
 	}
 }

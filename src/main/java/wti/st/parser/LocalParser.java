@@ -22,7 +22,9 @@ public class LocalParser {
 			String appCompleteFileName = logFile.getPath().toString() + File.separator + SparkLogLabel.APPLICATION_COMPLETE_FILE;
 
 			File appCompleteFile = new File(appCompleteFileName);
-			if (appCompleteFile.exists()) {
+			if (logFile.isDirectory() && appCompleteFile.exists()) {
+				appIDs.add(appID);
+			}else if (appID.startsWith("app") && logFile.isFile() && !appID.endsWith(".inprogress")){
 				appIDs.add(appID);
 			}
 		}
@@ -58,7 +60,9 @@ public class LocalParser {
 				"inputFromMem,inputFromDisk,shuffleRead,shuffleWrite," +
 				"shuffleReadLocalBlocks,shuffleReadRemoteBlocks,diskSpilled,memSpilled,resultSize," +
 				"shuffleFetchWaitTime,shuffleWriteTime,tasksDeserialTime,tasksSerializeTime," +
-				 "tasksRunTime,tasksGCTime,tasksLastTime\n");
+				"tasksRunTime,tasksGCTime,tasksLastTime," +
+                "readBytes,writeBytes,bytesIn,bytesOut," +
+                "cpuPara,diskPara,netPara,cpuPara_1,diskPara_1,netPara_1,count\n");
 		for (String appID : appIDs) {
 
 			if (parseredAppsID.contains(appID)){
@@ -67,14 +71,22 @@ public class LocalParser {
 
 			SparkStageParser stageParser = new SparkStageParser(dir);
 
-			String eventFile = dir + File.separator + appID + File.separator + SparkLogLabel.EVENT_LOG_1_FILE;
+			String eventFile ="";
+			File applog = new File(dir + File.separator + appID);
+			if (applog.isDirectory()){
+				eventFile = dir + File.separator + appID + File.separator + SparkLogLabel.EVENT_LOG_1_FILE;
+			} else if (applog.isFile()){
+				eventFile = dir + File.separator + appID;
+			}
+
 			System.out.println("## Parser appID:	" + appID);
 
 			List<StageRecord> stages = stageParser.stageParserLocal(eventFile,appID);
 
 			for (StageRecord stageRecord : stages) {
-				Long stageRunningTime = stageRecord.getEndTime().getTime() -
-						stageRecord.getSubmitTime().getTime();
+				long startTimeStamp = stageRecord.getSubmitTime().getTime();
+				long endTimeStamp = stageRecord.getEndTime().getTime();
+				long stageRunningTime = endTimeStamp - startTimeStamp;
 				String line = stageRecord.getStageID() + "," +
 						stageRecord.getStageAttemptID() + "," +
 						stageRecord.getAppID() + "," +
@@ -98,7 +110,25 @@ public class LocalParser {
 						stageRecord.getTasksSerializeTime() + "," +
 						stageRecord.getTasksRunTime() +"," +
 						stageRecord.getTasksGCTime() + "," +
-						stageRecord.getTasksLastTime() +"\n";
+						stageRecord.getTasksLastTime() +",";
+
+				startTimeStamp = startTimeStamp/1000;
+				endTimeStamp = endTimeStamp/1000 + 1;
+				StageGangliaInfo stageGangliaInfo = new StageGangliaInfo(startTimeStamp,endTimeStamp);
+				stageGangliaInfo.queryInfo();
+
+				line += stageGangliaInfo.getReadBytes()+"," +
+						stageGangliaInfo.getWriteBytes() + "," +
+						stageGangliaInfo.getBytesIn() + "," +
+						stageGangliaInfo.getBytesOut() + "," +
+						stageGangliaInfo.getCpuUtiPara() + "," +
+						stageGangliaInfo.getDiskUtiPara() + "," +
+						stageGangliaInfo.getNetUtiPara() + "," +
+						stageGangliaInfo.getCpuUtiPara_1() + "," +
+						stageGangliaInfo.getDiskUtiPara_1() + "," +
+						stageGangliaInfo.getNetUtiPara_1() + "," +
+						stageGangliaInfo.getCount()+ '\n';
+
 				fw.write(line);
 			}
 		}
@@ -106,8 +136,8 @@ public class LocalParser {
 	}
 
 	public static void main(String[] args) throws IOException {
-		String dirPath = "C:\\Users\\IBM_ADMIN\\IdeaProjects\\sparkWorkload\\history";//args[0]; //
-		String output ="C:\\Users\\IBM_ADMIN\\IdeaProjects\\sparkLogParser\\bin\\workloadLog_3.17__.csv";
+		String dirPath =args[0]; // "C:\\Users\\IBM_ADMIN\\IdeaProjects\\sparkWorkload\\history";//
+		String output =args[1];  //"C:\\Users\\IBM_ADMIN\\IdeaProjects\\sparkLogParser\\bin\\workloadLog_3.17__.csv";
 		//args[1];   //
 		LocalParser lp = new LocalParser();
 		List<String> apps =lp.listApps(dirPath);

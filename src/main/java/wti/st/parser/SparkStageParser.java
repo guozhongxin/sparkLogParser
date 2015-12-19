@@ -41,7 +41,8 @@ public class SparkStageParser {
 		this.sparkLogDir = sparkLogDir;
 	}
 
-	public List<StageRecord> stageParser(String appID) throws IOException {
+
+	public List<StageRecord> stageParserHdfs(String appID) throws IOException {
 
 
 		String appLogDir = sparkLogDir + appID + File.separator;
@@ -55,47 +56,102 @@ public class SparkStageParser {
 		FSDataInputStream in = fs.open(new Path(appLogFile));
 		BufferedReader br = new BufferedReader(new InputStreamReader(in));
 
-		String line = null;
-		Gson gson = new Gson();
-		List<StageRecord> stages = new ArrayList<StageRecord>();
-		List<TaskRecord> tasks = new ArrayList<TaskRecord>();
+//		String line = null;
+//		int lineNumber =0;
+//		Gson gson = new Gson();
+//		List<StageRecord> stages = new ArrayList<StageRecord>();
+//		List<TaskRecord> tasks = new ArrayList<TaskRecord>();
+//
+//
+//		while ((line = br.readLine()) != null) {
+//			lineNumber +=1;
+//			Map<String, Object> lineMap = gson.fromJson(line,
+//					new TypeToken<Map<String, Object>>() {
+//					}.getType());
+//
+//			String eventName = (String) lineMap.get(SparkLogLabel.EVENT);
+//
+//			if (eventName.equals(SparkLogLabel.STAGE_COMPLETE_EVENT)) {
+//				StageRecord stage = parserStageLine(lineMap, appID);
+//				stages.add(stage);
+//			}
+//
+//
+//			if (eventName.equals(SparkLogLabel.TASK_END_EVENT)) {
+//				try{
+//					TaskRecord task = parserTask(lineMap, appID);
+//					tasks.add(task);
+//				}catch (Exception e){
+//					System.out.println("line : " + lineNumber);
+//					System.out.println(e.getMessage());
+//				}
+//			}
+//		}
 
-
-		while ((line = br.readLine()) != null) {
-			Map<String, Object> lineMap = gson.fromJson(line,
-					new TypeToken<Map<String, Object>>() {
-					}.getType());
-
-			String eventName = (String) lineMap.get(SparkLogLabel.EVENT);
-
-			if (eventName.equals(SparkLogLabel.STAGE_COMPLETE_EVENT)) {
-				StageRecord stage = parserStage(lineMap, appID);
-				stages.add(stage);
-			}
-
-
-			if (eventName.equals(SparkLogLabel.TASK_END_EVENT)) {
-				TaskRecord task = parserTask(lineMap, appID);
-				tasks.add(task);
-			}
-		}
+		List<StageRecord> stageRecords = stageParser(br, appID);
 		br.close();
 		in.close();
 
-		return computeMetics(stages, tasks);
+		return stageRecords;
 	}
 
 	public List<StageRecord> stageParserLocal(String filePath,String appID) throws IOException{
+
+
+		System.out.println(filePath);
+		BufferedReader br = new BufferedReader(new FileReader(filePath));
+
+//		String line = null;
+//		int lineNumber =0;
+//		Gson gson = new Gson();
+//		List<StageRecord> stages = new ArrayList<StageRecord>();
+//
+//		List<TaskRecord> tasks = new ArrayList<TaskRecord>();
+//
+//		while ((line = br.readLine()) != null) {
+//			lineNumber +=1;
+//
+//			Map<String, Object> lineMap = gson.fromJson(line,
+//					new TypeToken<Map<String, Object>>() {
+//					}.getType());
+//
+//			String eventName = (String) lineMap.get(SparkLogLabel.EVENT);
+//
+//			if (eventName.equals(SparkLogLabel.STAGE_COMPLETE_EVENT)) {
+//
+//				StageRecord stage = parserStageLine(lineMap, appID);
+//				stages.add(stage);
+//			}
+//
+//
+//			if (eventName.equals(SparkLogLabel.TASK_END_EVENT)) {
+//
+//				try{
+//					TaskRecord task = parserTask(lineMap, appID);
+//					tasks.add(task);
+//				}catch (Exception e){
+//					System.out.println("line : " + lineNumber);
+//					System.out.println(e.getMessage());
+//				}
+//			}
+//		}
+		List<StageRecord> stageRecords = stageParser(br, appID);
+		br.close();
+
+		return stageRecords;
+	}
+
+	public List<StageRecord> stageParser(BufferedReader br, String appID)throws IOException{
+		String line = null;
+		int lineNumber =0;
+		Gson gson = new Gson();
 		List<StageRecord> stages = new ArrayList<StageRecord>();
 
 		List<TaskRecord> tasks = new ArrayList<TaskRecord>();
 
-		System.out.println(filePath);
-		BufferedReader br = new BufferedReader(new FileReader(filePath));
-		String line = null;
-		Gson gson = new Gson();
-
 		while ((line = br.readLine()) != null) {
+			lineNumber +=1;
+
 			Map<String, Object> lineMap = gson.fromJson(line,
 					new TypeToken<Map<String, Object>>() {
 					}.getType());
@@ -104,20 +160,23 @@ public class SparkStageParser {
 
 			if (eventName.equals(SparkLogLabel.STAGE_COMPLETE_EVENT)) {
 
-				StageRecord stage = parserStage(lineMap, appID);
+				StageRecord stage = parserStageLine(lineMap, appID);
 				stages.add(stage);
 			}
 
 
 			if (eventName.equals(SparkLogLabel.TASK_END_EVENT)) {
 
-				TaskRecord task = parserTask(lineMap, appID);
-				tasks.add(task);
+				try{
+					TaskRecord task = parserTask(lineMap, appID);
+					tasks.add(task);
+				}catch (Exception e){
+					System.out.println("line : " + lineNumber);
+					System.out.println(e.getMessage());
+				}
 			}
 		}
-		br.close();
-
-		return computeMetics(stages, tasks);
+		return computeMetrics(stages, tasks);
 	}
 
 	private TaskRecord parserTask(Map<String, Object> lineMap, String appID) {
@@ -236,7 +295,7 @@ public class SparkStageParser {
 	}
 
 
-	private StageRecord parserStage(Map<String, Object> lineMap, String appID) {
+	private StageRecord parserStageLine(Map<String, Object> lineMap, String appID) {
 
 		Gson gson = new Gson();
 		//"Task Info":{"Task ID":61,"Index":39,"Attempt":0,"Launch Time":1415256422721,"Executor ID":"8","Host":"bigant-test-003","Locality":"NODE_LOCAL","Speculative":false,"Getting Result Time":0,"Finish Time":1415256425620,"Failed":false,"Accumulables":[]}
@@ -261,7 +320,8 @@ public class SparkStageParser {
 		return stageRecord;
 	}
 
-	private List<StageRecord> computeMetics(List<StageRecord> stages, List<TaskRecord> tasks) {
+	private List<StageRecord> computeMetrics(List<StageRecord> stages, List<TaskRecord> tasks) {
+
 
 		for (TaskRecord taskRecord : tasks) {
 			StageRecord stageRecord = taskRecord.getStage();
@@ -273,12 +333,11 @@ public class SparkStageParser {
 			stageDetail.setInputFromMem(stageDetail.getInputFromMem() + taskRecord.getMemRead());
 			stageDetail.setInputFromHadoop(stageDetail.getInputFromHadoop() + taskRecord.getHadoopRead());
 			stageDetail.setInputFromDisk(stageDetail.getInputFromDisk() + taskRecord.getDiskRead());
+			stageDetail.setResultSize(stageDetail.getResultSize() + taskRecord.getResultSize());
+
 			stageDetail.setShuffleReadBytes(stageDetail.getShuffleReadBytes() + taskRecord.getShuffleReadRemoteBytes());
 			stageDetail.setShuffleWriteBytes(stageDetail.getShuffleWriteBytes() + taskRecord.getShuffleWriteBytes());
 			stageDetail.setShuffleFetchWaitTime(stageDetail.getShuffleFetchWaitTime() + taskRecord.getShuffleFetchWaitTime());
-			stageDetail.setResultSize(stageDetail.getResultSize() + taskRecord.getResultSize());
-			stageDetail.setTasksGCTime(stageDetail.getTasksGCTime() + taskRecord.getGcTime());
-			stageDetail.setTasksRunTime(stageDetail.getTasksRunTime() + taskRecord.getRunTime());
 
 			stageDetail.setShuffleWriteTime(stageDetail.getShuffleWriteTime() + taskRecord.getShuffleWriteTime());
 			stageDetail.setShuffleReadLocalBlocks(stageDetail.getShuffleReadLocalBlocks() + taskRecord.getShuffleReadLocalBlocks());
@@ -286,6 +345,8 @@ public class SparkStageParser {
 
 			Long taskLastTime = taskRecord.getFinishTime().getTime() - taskRecord.getLaunchTime().getTime();
 
+			stageDetail.setTasksGCTime(stageDetail.getTasksGCTime() + taskRecord.getGcTime());
+			stageDetail.setTasksRunTime(stageDetail.getTasksRunTime() + taskRecord.getRunTime());
 			stageDetail.setTasksLastTime(stageDetail.getTasksLastTime() + taskLastTime);
 			stageDetail.setTasksDeserialTime(stageDetail.getTasksDeserialTime() + taskRecord.getDeserialTime());
 			stageDetail.setTasksSerializeTime(stageDetail.getTasksSerializeTime() + taskRecord.getSerializeTime());
@@ -293,7 +354,40 @@ public class SparkStageParser {
 			stageDetail.setDiskSpilled(stageDetail.getDiskSpilled() + taskRecord.getDiskSpilled());
 			stageDetail.setMemSpilled(stageDetail.getMemSpilled() + taskRecord.getMemSpilled());
 
+			// variance:
+			int num = stageDetail.getTaskNum();
+			stageDetail.setShuffleReadBytesVar(stageDetail.getShuffleReadBytesVar() + Math.pow(taskRecord.getShuffleReadRemoteBytes(),2)/num);
+			stageDetail.setShuffleWriteBytesVar(stageDetail.getShuffleWriteBytesVar() + Math.pow(taskRecord.getShuffleWriteBytes(),2)/num);
+			stageDetail.setShuffleFetchWaitTimeVar(stageDetail.getShuffleFetchWaitTimeVar() + Math.pow(taskRecord.getShuffleFetchWaitTime(),2)/num);
+			stageDetail.setShuffleWriteTimeVar(stageDetail.getShuffleWriteTimeVar() + Math.pow(taskRecord.getShuffleWriteTime(),2)/num);
+			stageDetail.setShuffleReadRemoteBlocksVar(stageDetail.getShuffleReadRemoteBlocksVar() + Math.pow(taskRecord.getShuffleReadRemoteBlocks(),2)/num);
+
+			stageDetail.setTasksGCTimeVar(stageDetail.getTasksGCTimeVar() + Math.pow(taskRecord.getGcTime(),2)/num);
+			stageDetail.setTasksRunTimeVar(stageDetail.getTasksRunTimeVar() + Math.pow(taskRecord.getRunTime(),2)/num);
+			stageDetail.setTasksLastTimeVar(stageDetail.getTasksLastTimeVar() + Math.pow(taskLastTime,2)/num);
+			stageDetail.setTasksDeserialTimeVar(stageDetail.getTasksDeserialTimeVar() + Math.pow(taskRecord.getDeserialTime(),2)/num);
+			stageDetail.setTasksSerializeTimeVar(stageDetail.getTasksSerializeTimeVar() + Math.pow(taskRecord.getSerializeTime(),2)/num);
+			//setback
 			stages.set(index, stageDetail);
+		}
+		for (int i =0;i<stages.size();i++){
+
+			StageRecord stageDetail = stages.get(i);
+
+			int num = stageDetail.getTaskNum();
+			stageDetail.setShuffleReadBytesVar(stageDetail.getShuffleReadBytesVar() - Math.pow(stageDetail.getShuffleReadBytes()/num,2));
+			stageDetail.setShuffleWriteBytesVar(stageDetail.getShuffleWriteBytesVar() - Math.pow(stageDetail.getShuffleWriteBytes()/num,2));
+			stageDetail.setShuffleFetchWaitTimeVar(stageDetail.getShuffleFetchWaitTimeVar() - Math.pow(stageDetail.getShuffleFetchWaitTime()/num,2));
+			stageDetail.setShuffleWriteTimeVar(stageDetail.getShuffleWriteTimeVar() - Math.pow(stageDetail.getShuffleWriteTime()/num,2));
+			stageDetail.setShuffleReadRemoteBlocksVar(stageDetail.getShuffleReadRemoteBlocksVar() - Math.pow(stageDetail.getShuffleReadRemoteBlocks()/num,2));
+
+			stageDetail.setTasksGCTimeVar(stageDetail.getTasksGCTimeVar() + Math.pow(stageDetail.getTasksGCTime()/num,2));
+			stageDetail.setTasksRunTimeVar(stageDetail.getTasksRunTimeVar() + Math.pow(stageDetail.getTasksRunTime()/num,2));
+			stageDetail.setTasksLastTimeVar(stageDetail.getTasksLastTimeVar() + Math.pow(stageDetail.getTasksLastTime()/num,2));
+			stageDetail.setTasksDeserialTimeVar(stageDetail.getTasksDeserialTimeVar() + Math.pow(stageDetail.getTasksDeserialTime()/num,2));
+			stageDetail.setTasksSerializeTimeVar(stageDetail.getTasksSerializeTimeVar() + Math.pow(stageDetail.getTasksSerializeTime()/num,2));
+
+			stages.set(i,stageDetail);
 		}
 		return stages;
 	}

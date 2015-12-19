@@ -134,6 +134,14 @@ public class SparkTaskParser {
         for (TaskRecord sparkTaskRecord : tasks) {
             System.out.println(sparkTaskRecord);
         }
-
+//        List<Integer> l = new ArrayList<Integer>();
+//        for (int i =0;i<10;i++){
+//            l.add(i);
+//        }
+//        for (int i = 0;i<l.size();i++){
+//            int p = l.get(i)*10;
+//            l.set(i,p);
+//        }
+//        System.out.print(l);
     }
 }
