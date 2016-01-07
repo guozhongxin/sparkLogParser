@@ -61,6 +61,7 @@ public class LocalParser {
 				"shuffleReadLocalBlocks,shuffleReadRemoteBlocks,diskSpilled,memSpilled,resultSize," +
 				"shuffleFetchWaitTime,shuffleWriteTime,tasksDeserialTime,tasksSerializeTime," +
 				"tasksRunTime,tasksGCTime,tasksLastTime," +
+				"bytesWritten,recordsWritten," +
 				"shuffleReadVar,shuffleWriteVar,shuffleFetchWaitTimeVar,shuffleWriteTimeVar,shuffleReadRemoteBlocksVar," +
 				"tasksDeserialTimeVar,tasksSerializeTimeVar,tasksRunTimeVar,tasksGCTimeVar,tasksLastTimeVar," +
                 "readBytes,writeBytes,bytesIn,bytesOut," +
@@ -114,6 +115,8 @@ public class LocalParser {
 						stageRecord.getTasksGCTime() + "," +
 						stageRecord.getTasksLastTime() +"," +
 						//add statistic
+						stageRecord.getBytesWrittenVar()  + "," +
+						stageRecord.getRecordWrittenVar()  + "," +
 						stageRecord.getShuffleReadBytesVar() + "," +
 						stageRecord.getShuffleWriteBytesVar() + "," +
 						stageRecord.getShuffleFetchWaitTimeVar() + "," +

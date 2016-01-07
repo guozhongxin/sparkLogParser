@@ -25,6 +25,9 @@ public class StageRecord {
 	private long inputFromHadoop;
 	private long inputFromDisk;
 
+	private long bytesWritten;
+	private long recordWritten;
+
 	private long shuffleReadBytes;
 	private long shuffleWriteBytes;
 	private long shuffleFetchWaitTime;
@@ -55,6 +58,8 @@ public class StageRecord {
 	private double tasksDeserialTimeVar;
 	private double tasksSerializeTimeVar;
 
+	private double bytesWrittenVar;
+	private double recordWrittenVar;
 
 	public StageRecord(int stageID, int stageAttemprID, String appID) {
 		this.stageID = stageID;
@@ -184,6 +189,22 @@ public class StageRecord {
 
 	public void setInputFromDisk(long inputFromDisk) {
 		this.inputFromDisk = inputFromDisk;
+	}
+
+	public long getBytesWritten() {
+		return bytesWritten;
+	}
+
+	public void setBytesWritten(long bytesWritten) {
+		this.bytesWritten = bytesWritten;
+	}
+
+	public long getRecordWritten() {
+		return recordWritten;
+	}
+
+	public void setRecordWritten(long recordWritten) {
+		this.recordWritten = recordWritten;
 	}
 
 	public long getShuffleReadBytes() {
@@ -378,12 +399,28 @@ public class StageRecord {
 		this.tasksSerializeTimeVar = tasksSerializeTimeVar;
 	}
 
+	public double getBytesWrittenVar() {
+		return bytesWrittenVar;
+	}
+
+	public void setBytesWrittenVar(double bytesWrittenVar) {
+		this.bytesWrittenVar = bytesWrittenVar;
+	}
+
+	public double getRecordWrittenVar() {
+		return recordWrittenVar;
+	}
+
+	public void setRecordWrittenVar(double recordWrittenVar) {
+		this.recordWrittenVar = recordWrittenVar;
+	}
+
 	@Override
 	public String toString() {
 		return "StageRecord{" +
-				"stageID=" + stageID +
+				"appID='" + appID + '\'' +
+				", stageID=" + stageID +
 				", stageAttemptID=" + stageAttemptID +
-				", appID='" + appID + '\'' +
 				", stageName='" + stageName + '\'' +
 				", stageDetial='" + stageDetial + '\'' +
 				", taskNum=" + taskNum +
@@ -394,6 +431,8 @@ public class StageRecord {
 				", inputFromMem=" + inputFromMem +
 				", inputFromHadoop=" + inputFromHadoop +
 				", inputFromDisk=" + inputFromDisk +
+				", bytesWritten=" + bytesWritten +
+				", recordWritten=" + recordWritten +
 				", shuffleReadBytes=" + shuffleReadBytes +
 				", shuffleWriteBytes=" + shuffleWriteBytes +
 				", shuffleFetchWaitTime=" + shuffleFetchWaitTime +
@@ -418,6 +457,8 @@ public class StageRecord {
 				", tasksLastTimeVar=" + tasksLastTimeVar +
 				", tasksDeserialTimeVar=" + tasksDeserialTimeVar +
 				", tasksSerializeTimeVar=" + tasksSerializeTimeVar +
+				", bytesWrittenVar=" + bytesWrittenVar +
+				", recordWrittenVar=" + recordWrittenVar +
 				'}';
 	}
 }

@@ -240,6 +240,9 @@ public class SparkStageParser {
 		TaskReadMethod readMethod = TaskReadMethod.Others;
 		long bytesRead = 0l;
 
+		long bytesWritten =0l;
+		long recordWritten = 0l;
+
 		long shuffleWriteTime = 0l;
 		long shuffleWriteBytes = 0l;
 
@@ -253,8 +256,7 @@ public class SparkStageParser {
 			Object inputMetrics = taskMetricsMap.get(SparkLogLabel.TASK_INPUT_METRICS);
 			String inputMetricsString = gson.toJson(inputMetrics);
 			Map<String, Object> inputMetricsMap = gson.fromJson(inputMetricsString,
-					new TypeToken<Map<String, Object>>() {
-					}.getType());
+					new TypeToken<Map<String, Object>>() {}.getType());
 
 			readMethod = parserDataReadMethod(inputMetricsMap.get(SparkLogLabel.TASK_INPUT_METHOD));
 			bytesRead = parserLong(inputMetricsMap.get(SparkLogLabel.TASK_BYTES_READ));
@@ -263,8 +265,12 @@ public class SparkStageParser {
 		//TODO "Output Metrics":{"Data Write Method":"Hadoop","Bytes Written":128355120,"Records Written":781259}
 		if (taskMetricsMap.containsKey(SparkLogLabel.TASK_OUTPUT_METRICS)){
 			Object outputMetrics = taskMetricsMap.get(SparkLogLabel.TASK_OUTPUT_METRICS);
+			String outputMetricsString = gson.toJson(outputMetrics);
+			Map<String, Object> outMetricsMap = gson.fromJson(outputMetricsString,
+					new TypeToken<Map<String, Object>>() {}.getType());
 
-
+			bytesWritten = parserLong(outMetricsMap.get(SparkLogLabel.TASK_BYTES_WRITE));
+			recordWritten = parserLong(outMetricsMap.get(SparkLogLabel.TASK_RECORDS_WRITE));
 
 		}
 
@@ -298,6 +304,9 @@ public class SparkStageParser {
 		TaskRecord task = new TaskRecord(taskID, taskAttID, stage, taskType, startTime, endTime, nodeName, runTime, gcTime,
 				deserialTime, serialTime, memSpilled, diskSpilled, bytesRead, readMethod, resultSize, shuffleWriteBytes,
 				shuffleWriteTime, shuffleReadRemoteBlocks, shuffleReadLocalBlocks, shuffleReadRemoteBytes, shuffleFetchWaitTime);
+
+		task.setBytesWrite(bytesWritten);
+		task.setRecordWrite(recordWritten);
 
 		return task;
 	}
@@ -343,6 +352,9 @@ public class SparkStageParser {
 			stageDetail.setInputFromDisk(stageDetail.getInputFromDisk() + taskRecord.getDiskRead());
 			stageDetail.setResultSize(stageDetail.getResultSize() + taskRecord.getResultSize());
 
+			stageDetail.setBytesWritten(stageDetail.getBytesWritten() + taskRecord.getBytesWrite());
+			stageDetail.setRecordWritten(stageDetail.getRecordWritten() + taskRecord.getRecordWrite());
+
 			stageDetail.setShuffleReadBytes(stageDetail.getShuffleReadBytes() + taskRecord.getShuffleReadRemoteBytes());
 			stageDetail.setShuffleWriteBytes(stageDetail.getShuffleWriteBytes() + taskRecord.getShuffleWriteBytes());
 			stageDetail.setShuffleFetchWaitTime(stageDetail.getShuffleFetchWaitTime() + taskRecord.getShuffleFetchWaitTime());
@@ -375,6 +387,10 @@ public class SparkStageParser {
 			stageDetail.setTasksLastTimeVar(stageDetail.getTasksLastTimeVar() + Math.pow(taskLastTime,2)/num);
 			stageDetail.setTasksDeserialTimeVar(stageDetail.getTasksDeserialTimeVar() + Math.pow(taskRecord.getDeserialTime(),2)/num);
 			stageDetail.setTasksSerializeTimeVar(stageDetail.getTasksSerializeTimeVar() + Math.pow(taskRecord.getSerializeTime(),2)/num);
+
+			stageDetail.setBytesWrittenVar(stageDetail.getBytesWrittenVar() + Math.pow(taskRecord.getBytesWrite(),2)/num);
+			stageDetail.setRecordWrittenVar(stageDetail.getRecordWrittenVar() + Math.pow(taskRecord.getRecordWrite(), 2)/num);
+
 			//setback
 			stages.set(index, stageDetail);
 		}
@@ -394,6 +410,9 @@ public class SparkStageParser {
 			stageDetail.setTasksLastTimeVar(stageDetail.getTasksLastTimeVar() - Math.pow(stageDetail.getTasksLastTime()/num,2));
 			stageDetail.setTasksDeserialTimeVar(stageDetail.getTasksDeserialTimeVar() - Math.pow(stageDetail.getTasksDeserialTime()/num,2));
 			stageDetail.setTasksSerializeTimeVar(stageDetail.getTasksSerializeTimeVar() - Math.pow(stageDetail.getTasksSerializeTime()/num,2));
+
+			stageDetail.setBytesWrittenVar(stageDetail.getBytesWrittenVar() - Math.pow(stageDetail.getBytesWritten()/num,2));
+			stageDetail.setRecordWrittenVar(stageDetail.getRecordWrittenVar() - Math.pow(stageDetail.getRecordWritten()/num, 2));
 
 			stages.set(i,stageDetail);
 		}
