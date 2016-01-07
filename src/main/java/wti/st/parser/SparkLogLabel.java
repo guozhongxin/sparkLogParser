@@ -55,6 +55,10 @@ public class SparkLogLabel
     public static String TASK_INPUT_METHOD= "Data Read Method";
     public static String TASK_BYTES_READ= "Bytes Read";
 
+    public static String TASK_OUTPUT_METRICS= "Output Metrics";
+    public static String TASK_BYTES_WRITE= "Bytes Written";
+    public static String TASK_RECORDS_WRITE= "Records Written";
+
     public static String TASK_SHUFFLE_WRITE_METRICS = "Shuffle Write Metrics";
     public static String TASK_SHUFFLE_WRITE_BYTES = "Shuffle Bytes Written";
     public static String TASK_SHUFFLE_WRITE_TIME = "Shuffle Write Time";

@@ -61,6 +61,8 @@ public class LocalParser {
 				"shuffleReadLocalBlocks,shuffleReadRemoteBlocks,diskSpilled,memSpilled,resultSize," +
 				"shuffleFetchWaitTime,shuffleWriteTime,tasksDeserialTime,tasksSerializeTime," +
 				"tasksRunTime,tasksGCTime,tasksLastTime," +
+				"shuffleReadVar,shuffleWriteVar,shuffleFetchWaitTimeVar,shuffleWriteTimeVar,shuffleReadRemoteBlocksVar," +
+				"tasksDeserialTimeVar,tasksSerializeTimeVar,tasksRunTimeVar,tasksGCTimeVar,tasksLastTimeVar," +
                 "readBytes,writeBytes,bytesIn,bytesOut," +
                 "cpuPara,diskPara,netPara,cpuPara_1,diskPara_1,netPara_1,count\n");
 		for (String appID : appIDs) {
@@ -110,7 +112,18 @@ public class LocalParser {
 						stageRecord.getTasksSerializeTime() + "," +
 						stageRecord.getTasksRunTime() +"," +
 						stageRecord.getTasksGCTime() + "," +
-						stageRecord.getTasksLastTime() +",";
+						stageRecord.getTasksLastTime() +"," +
+						//add statistic
+						stageRecord.getShuffleReadBytesVar() + "," +
+						stageRecord.getShuffleWriteBytesVar() + "," +
+						stageRecord.getShuffleFetchWaitTimeVar() + "," +
+						stageRecord.getShuffleWriteTimeVar() + "," +
+						stageRecord.getShuffleReadRemoteBlocksVar() + "," +
+						stageRecord.getTasksDeserialTimeVar() + "," +
+						stageRecord.getTasksSerializeTimeVar() + "," +
+						stageRecord.getTasksRunTimeVar() + "," +
+						stageRecord.getTasksGCTimeVar() + "," +
+						stageRecord.getTasksLastTimeVar() + "," ;
 
 				startTimeStamp = startTimeStamp/1000;
 				endTimeStamp = endTimeStamp/1000 + 1;

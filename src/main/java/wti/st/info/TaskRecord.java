@@ -27,6 +27,11 @@ public class TaskRecord {
 	// may do not appear
 	private long bytesRead;
 	private TaskReadMethod readMethod;
+	private long recordRead;
+
+	//add on 2016/1/7
+	private long bytesWrite;
+	private long recordWrite;
 
 	private long shuffleWriteBytes;
 	private long shuffleWriteTime;
@@ -228,6 +233,21 @@ public class TaskRecord {
 		}
 	}
 
+	public long getBytesWrite() {
+		return bytesWrite;
+	}
+
+	public void setBytesWrite(long bytesWrite) {
+		this.bytesWrite = bytesWrite;
+	}
+
+	public long getRecordWrite() {
+		return recordWrite;
+	}
+
+	public void setRecordWrite(long recordWrite) {
+		this.recordWrite = recordWrite;
+	}
 
 	public long getShuffleWriteBytes() {
 		return shuffleWriteBytes;
@@ -279,7 +299,7 @@ public class TaskRecord {
 
 	@Override
 	public String toString() {
-		return "TaskDetail{" +
+		return "TaskRecord{" +
 				"taskID=" + taskID +
 				", taskAttemptID=" + taskAttemptID +
 				", stage=" + stage +
@@ -291,11 +311,20 @@ public class TaskRecord {
 				", gcTime=" + gcTime +
 				", deserialTime=" + deserialTime +
 				", serializeTime=" + serializeTime +
-				", bytesRead=" + bytesRead +
-				", readMethod=" + readMethod +
 				", resultSize=" + resultSize +
 				", memSpilled=" + memSpilled +
 				", diskSpilled=" + diskSpilled +
+				", bytesRead=" + bytesRead +
+				", readMethod=" + readMethod +
+				", recordRead=" + recordRead +
+				", bytesWrite=" + bytesWrite +
+				", recordWrite=" + recordWrite +
+				", shuffleWriteBytes=" + shuffleWriteBytes +
+				", shuffleWriteTime=" + shuffleWriteTime +
+				", shuffleReadRemoteBlocks=" + shuffleReadRemoteBlocks +
+				", shuffleReadLocalBlocks=" + shuffleReadLocalBlocks +
+				", shuffleReadRemoteBytes=" + shuffleReadRemoteBytes +
+				", shuffleFetchWaitTime=" + shuffleFetchWaitTime +
 				'}';
 	}
 

@@ -260,6 +260,14 @@ public class SparkStageParser {
 			bytesRead = parserLong(inputMetricsMap.get(SparkLogLabel.TASK_BYTES_READ));
 		}
 
+		//TODO "Output Metrics":{"Data Write Method":"Hadoop","Bytes Written":128355120,"Records Written":781259}
+		if (taskMetricsMap.containsKey(SparkLogLabel.TASK_OUTPUT_METRICS)){
+			Object outputMetrics = taskMetricsMap.get(SparkLogLabel.TASK_OUTPUT_METRICS);
+
+
+
+		}
+
 		// "Shuffle Write Metrics":{"Shuffle Bytes Written":66757322,"Shuffle Write Time":138373180}
 		if (taskMetricsMap.containsKey(SparkLogLabel.TASK_SHUFFLE_WRITE_METRICS)) {
 			Object shuffleWriteMetrics = taskMetricsMap.get(SparkLogLabel.TASK_SHUFFLE_WRITE_METRICS);
@@ -381,11 +389,11 @@ public class SparkStageParser {
 			stageDetail.setShuffleWriteTimeVar(stageDetail.getShuffleWriteTimeVar() - Math.pow(stageDetail.getShuffleWriteTime()/num,2));
 			stageDetail.setShuffleReadRemoteBlocksVar(stageDetail.getShuffleReadRemoteBlocksVar() - Math.pow(stageDetail.getShuffleReadRemoteBlocks()/num,2));
 
-			stageDetail.setTasksGCTimeVar(stageDetail.getTasksGCTimeVar() + Math.pow(stageDetail.getTasksGCTime()/num,2));
-			stageDetail.setTasksRunTimeVar(stageDetail.getTasksRunTimeVar() + Math.pow(stageDetail.getTasksRunTime()/num,2));
-			stageDetail.setTasksLastTimeVar(stageDetail.getTasksLastTimeVar() + Math.pow(stageDetail.getTasksLastTime()/num,2));
-			stageDetail.setTasksDeserialTimeVar(stageDetail.getTasksDeserialTimeVar() + Math.pow(stageDetail.getTasksDeserialTime()/num,2));
-			stageDetail.setTasksSerializeTimeVar(stageDetail.getTasksSerializeTimeVar() + Math.pow(stageDetail.getTasksSerializeTime()/num,2));
+			stageDetail.setTasksGCTimeVar(stageDetail.getTasksGCTimeVar() - Math.pow(stageDetail.getTasksGCTime()/num,2));
+			stageDetail.setTasksRunTimeVar(stageDetail.getTasksRunTimeVar() - Math.pow(stageDetail.getTasksRunTime()/num,2));
+			stageDetail.setTasksLastTimeVar(stageDetail.getTasksLastTimeVar() - Math.pow(stageDetail.getTasksLastTime()/num,2));
+			stageDetail.setTasksDeserialTimeVar(stageDetail.getTasksDeserialTimeVar() - Math.pow(stageDetail.getTasksDeserialTime()/num,2));
+			stageDetail.setTasksSerializeTimeVar(stageDetail.getTasksSerializeTimeVar() - Math.pow(stageDetail.getTasksSerializeTime()/num,2));
 
 			stages.set(i,stageDetail);
 		}
