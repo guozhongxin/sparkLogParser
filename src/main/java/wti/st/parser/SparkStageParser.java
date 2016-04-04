@@ -101,40 +101,6 @@ public class SparkStageParser {
 		System.out.println(filePath);
 		BufferedReader br = new BufferedReader(new FileReader(filePath));
 
-//		String line = null;
-//		int lineNumber =0;
-//		Gson gson = new Gson();
-//		List<StageRecord> stages = new ArrayList<StageRecord>();
-//
-//		List<TaskRecord> tasks = new ArrayList<TaskRecord>();
-//
-//		while ((line = br.readLine()) != null) {
-//			lineNumber +=1;
-//
-//			Map<String, Object> lineMap = gson.fromJson(line,
-//					new TypeToken<Map<String, Object>>() {
-//					}.getType());
-//
-//			String eventName = (String) lineMap.get(SparkLogLabel.EVENT);
-//
-//			if (eventName.equals(SparkLogLabel.STAGE_COMPLETE_EVENT)) {
-//
-//				StageRecord stage = parserStageLine(lineMap, appID);
-//				stages.add(stage);
-//			}
-//
-//
-//			if (eventName.equals(SparkLogLabel.TASK_END_EVENT)) {
-//
-//				try{
-//					TaskRecord task = parserTask(lineMap, appID);
-//					tasks.add(task);
-//				}catch (Exception e){
-//					System.out.println("line : " + lineNumber);
-//					System.out.println(e.getMessage());
-//				}
-//			}
-//		}
 		List<StageRecord> stageRecords = stageParser(br, appID);
 		br.close();
 
@@ -148,7 +114,7 @@ public class SparkStageParser {
 		List<StageRecord> stages = new ArrayList<StageRecord>();
 
 		List<TaskRecord> tasks = new ArrayList<TaskRecord>();
-
+		String appName ="";
 		while ((line = br.readLine()) != null) {
 			lineNumber +=1;
 
@@ -158,9 +124,14 @@ public class SparkStageParser {
 
 			String eventName = (String) lineMap.get(SparkLogLabel.EVENT);
 
-			if (eventName.equals(SparkLogLabel.STAGE_COMPLETE_EVENT)) {
 
+			if (eventName.equals(SparkLogLabel.APP_START_EVENT)){
+				appName = (String) lineMap.get(SparkLogLabel.APP_NAME);
+			}
+
+			if (eventName.equals(SparkLogLabel.STAGE_COMPLETE_EVENT)) {
 				StageRecord stage = parserStageLine(lineMap, appID);
+				stage.setAppName(appName);
 				stages.add(stage);
 			}
 
@@ -262,7 +233,7 @@ public class SparkStageParser {
 			bytesRead = parserLong(inputMetricsMap.get(SparkLogLabel.TASK_BYTES_READ));
 		}
 
-		//TODO "Output Metrics":{"Data Write Method":"Hadoop","Bytes Written":128355120,"Records Written":781259}
+		// "Output Metrics":{"Data Write Method":"Hadoop","Bytes Written":128355120,"Records Written":781259}
 		if (taskMetricsMap.containsKey(SparkLogLabel.TASK_OUTPUT_METRICS)){
 			Object outputMetrics = taskMetricsMap.get(SparkLogLabel.TASK_OUTPUT_METRICS);
 			String outputMetricsString = gson.toJson(outputMetrics);

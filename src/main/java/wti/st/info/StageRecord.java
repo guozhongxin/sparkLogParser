@@ -9,6 +9,8 @@ public class StageRecord {
 
 	private final String appID;
 
+	private String appName;
+
 	private String stageName;
 	private String stageDetial;
 
@@ -113,6 +115,14 @@ public class StageRecord {
 
 	public String getAppID() {
 		return appID;
+	}
+
+	public String getAppName() {
+		return appName;
+	}
+
+	public void setAppName(String appName) {
+		this.appName = appName;
 	}
 
 	public void setStageName(String stageName) {
@@ -418,9 +428,10 @@ public class StageRecord {
 	@Override
 	public String toString() {
 		return "StageRecord{" +
-				"appID='" + appID + '\'' +
-				", stageID=" + stageID +
+				"stageID=" + stageID +
 				", stageAttemptID=" + stageAttemptID +
+				", appID='" + appID + '\'' +
+				", appName='" + appName + '\'' +
 				", stageName='" + stageName + '\'' +
 				", stageDetial='" + stageDetial + '\'' +
 				", taskNum=" + taskNum +

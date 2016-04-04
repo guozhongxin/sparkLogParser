@@ -56,12 +56,14 @@ public class LocalParser {
 
 		FileWriter fw = new FileWriter(output,true);
 
-		fw.write("stageID,stageAttID,appID,stageName,taskNum,runningTime,stageType,inputFromHadoop," +
-				"inputFromMem,inputFromDisk,shuffleRead,shuffleWrite," +
-				"shuffleReadLocalBlocks,shuffleReadRemoteBlocks,diskSpilled,memSpilled,resultSize," +
+		fw.write("stageID,stageAttID,appID,appName,stageName,startTimeStampt,taskNum,runningTime,stageType," +
+				"inputFromHadoop,inputFromMem,inputFromDisk," +
+				"outputBytes,outputRecords," +
+				"shuffleRead,shuffleWrite,shuffleReadLocalBlocks,shuffleReadRemoteBlocks," +
+				"diskSpilled,memSpilled,resultSize," +
 				"shuffleFetchWaitTime,shuffleWriteTime,tasksDeserialTime,tasksSerializeTime," +
 				"tasksRunTime,tasksGCTime,tasksLastTime," +
-				"bytesWritten,recordsWritten," +
+				"bytesWrittenVar,recordsWrittenVar," +
 				"shuffleReadVar,shuffleWriteVar,shuffleFetchWaitTimeVar,shuffleWriteTimeVar,shuffleReadRemoteBlocksVar," +
 				"tasksDeserialTimeVar,tasksSerializeTimeVar,tasksRunTimeVar,tasksGCTimeVar,tasksLastTimeVar," +
                 "readBytes,writeBytes,bytesIn,bytesOut," +
@@ -93,13 +95,17 @@ public class LocalParser {
 				String line = stageRecord.getStageID() + "," +
 						stageRecord.getStageAttemptID() + "," +
 						stageRecord.getAppID() + "," +
+						stageRecord.getAppName() + "," +
 						stageRecord.getStageName() + "," +
+						stageRecord.getSubmitTime()+","+
 						stageRecord.getTaskNum() + "," +
 						stageRunningTime + "," +
 						stageRecord.getStageType() + "," +
 						stageRecord.getInputFromHadoop() + "," +
 						stageRecord.getInputFromMem() + "," +
 						stageRecord.getInputFromDisk() + "," +
+						stageRecord.getBytesWritten()  + "," +
+						stageRecord.getRecordWritten() + "," +
 						stageRecord.getShuffleReadBytes() + "," +
 						stageRecord.getShuffleWriteBytes() + "," +
 						stageRecord.getShuffleReadLocalBlocks() + "," +

@@ -15,6 +15,7 @@ import java.util.*;
  * Created by dell on 2015/11/18.
  */
 public class StageGangliaInfo {
+
     private long startTimestamp = 0l;
     private long endTimestamp = 0l;
 
@@ -65,7 +66,7 @@ public class StageGangliaInfo {
         diskStateFW.flush();
 
         FileWriter cpuFW = new FileWriter("./stagesGanglia/"+startTimestamp+"-ggCpu.csv");
-        String ggCpuFirstLine = "timeStamp,cluster,user,system,wio,aidle,idle,nice"
+        String ggCpuFirstLine = "timeStamp,node,user,system,wio,aidle,idle,nice"
                 + "\n";
         cpuFW.write(ggCpuFirstLine);
         for (GangliaCPU ggCPU : ggCpus)
@@ -79,6 +80,16 @@ public class StageGangliaInfo {
         }
         cpuFW.flush();
 
+        FileWriter netFW = new FileWriter("./stagesGanglia/"+startTimestamp+"-ggCpu.csv");
+        String ggNetFirstLine = "timeStamp,node,bytesIn,bytesOut" + "\n";
+        netFW.write(ggNetFirstLine);
+        for (GangliaNet ggNet : ggNets)
+        {
+            String line = ggNet.getTimeStamp() + "," + ggNet.getNodeId().getName() + ","
+                    + ggNet.getBytesIn()+"," + ggNet.getBytesOut() + "\n";
+            cpuFW.write(line);
+        }
+        cpuFW.flush();
         getAmount(ggDisks, ggNets);
         getUtilization(ggCpus,ggDisks,ggNets);
     }
@@ -108,6 +119,8 @@ public class StageGangliaInfo {
      */
     public void getUtilization(Collection<GangliaCPU> ggCpus, Collection<GangliaDiskState> ggDisks, Collection<GangliaNet> ggNets) {
 
+        Map<String,Long> diskstateMap = new HashMap<String, Long>();
+
         int utiSum =0;
         int tmp = 0;
 
@@ -134,6 +147,8 @@ public class StageGangliaInfo {
         for (GangliaDiskState ggDisk : ggDisks){
             tmp = tmp%12 + 1;
             if (ggDisk.getDiskName().equals("sdb") &&!ggDisk.getNodeId().getName().equals("dell01.wtist")){
+                String key = ggDisk.getNodeId().getName()+ggDisk.getTimeStamp();
+                diskstateMap.put(key, ggDisk.getWriteBytesPerSecond()+ggDisk.getReadBytesPerSecond());
                 if (ggDisk.getIoTimePercent()>=80){
                     diskUtiPara++;
                 }
@@ -147,6 +162,29 @@ public class StageGangliaInfo {
             }
         }
         diskUtiPara=diskUtiPara/4;
+
+        utiSum =0;
+        tmp = 0;
+        for (GangliaNet ggNet : ggNets){
+            tmp = tmp%12 + 1;
+            if (!ggNet.getNodeId().getName().equals("dell01.wtist")){
+                String key = ggNet.getNodeId().getName()+ggNet.getTimeStamp();
+                long disk = diskstateMap.get(key);
+
+                double networkAmount = (ggNet.getBytesIn() + ggNet.getBytesOut() - disk)/1024/1024;
+                if (networkAmount > 45){
+                    netUtiPara++;
+                }
+                utiSum+=networkAmount;
+            }
+            if (tmp==12 ){
+                if (utiSum >= 180) {
+                    diskUtiPara_1 += 1;
+                }
+                utiSum=0;
+            }
+        }
+        netUtiPara=netUtiPara/4;
     }
 
     @Override
